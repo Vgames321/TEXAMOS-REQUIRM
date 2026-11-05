@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEXAMO Firebase test</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    font-family: ui-monospace, 'Courier New', monospace;
+    background: #0d1230;
+    color: #f1f2fa;
+  }
+  .card {
+    width: min(560px, 100%);
+    background: #1c275c;
+    border: 3px solid #e6e8f5;
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  h1 { margin: 0 0 4px; font-size: 22px; color: #f2c94c; }
+  p { margin: 6px 0; line-height: 1.5; }
+  .status {
+    margin: 16px 0;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #0f163d;
+    border: 2px solid #3b4fb8;
+  }
+  .status.ok { border-color: #58c47a; color: #9be8b4; }
+  .status.bad { border-color: #ff5a5f; color: #ff9d9f; }
+  .log {
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: #0f163d;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 220px;
+    overflow: auto;
+  }
+  .log div { padding: 2px 0; color: #aeb4d8; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>TEXAMO network test</h1>
+    <p>This page tries to reach your Firebase database, write one line, and read it back. If it works on a school Chromebook, multiplayer is possible there.</p>
+    <div class="status" id="status">Starting the test...</div>
+    <div class="log" id="log"></div>
+  </div>
+
+  <!-- Firebase, loaded from Google's servers. If the school blocks these, the test fails here. -->
+  <script type="module">
+    const statusEl = document.getElementById('status');
+    const logEl = document.getElementById('log');
+
+    function log(text) {
+      const line = document.createElement('div');
+      line.textContent = text;
+      logEl.appendChild(line);
+    }
+    function pass(text) { statusEl.textContent = text; statusEl.className = 'status ok'; }
+    function fail(text) { statusEl.textContent = text; statusEl.className = 'status bad'; }
+
+    // Your project's settings.
+    const firebaseConfig = {
+      apiKey: "AIzaSyBgKIhT0oAMS18JuZNlRKZ2OkF153NfU_Q",
+      authDomain: "texamo-1ba9a.firebaseapp.com",
+      databaseURL: "https://texamo-1ba9a-default-rtdb.firebaseio.com",
+      projectId: "texamo-1ba9a",
+      storageBucket: "texamo-1ba9a.firebasestorage.app",
+      messagingSenderId: "944121425285",
+      appId: "1:944121425285:web:ec5ae04beff6bc203a68ec",
+    };
+
+    try {
+      log('Loading Firebase...');
+      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+      const { getDatabase, ref, set, get } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
+      log('Firebase loaded. Connecting...');
+
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      // Write one line, stamped with the time.
+      const testRef = ref(db, 'networkTest/lastVisit');
+      const now = new Date().toLocaleString();
+      log('Writing a test line...');
+      await set(testRef, now);
+      log('Write succeeded.');
+
+      // Read it back.
+      log('Reading it back...');
+      const snapshot = await get(testRef);
+      const value = snapshot.val();
+      log('Read back: ' + value);
+
+      if (value === now) {
+        pass('It works! Multiplayer is possible on this network.');
+      } else {
+        pass('Connected, but the value did not match. Still a good sign.');
+      }
+    } catch (err) {
+      fail('Blocked or failed. Multiplayer may not work on this network.');
+      log('Error: ' + (err && err.message ? err.message : err));
+      log('If you are at school and this failed, try it at home to compare.');
+    }
+  </script>
+</body>
+</html>
