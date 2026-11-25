@@ -90,6 +90,12 @@ input[type="range"] { accent-color: var(--gold); }
 .badge b { color: var(--gold); }
 @media (max-width: 1100px) { .brand small { display: none; } .badge { display: none; } .tabbtn { padding: 6px 8px; font-size: 15px; } .actions .btn { font-size: 14px; padding: 4px 10px; } }
 .actions .btn { white-space: nowrap; }
+/* [CHANGED] TWO ROWS UP TOP (Nov 23): the name, Save and Publish on top, and every tab on its own row underneath.
+   The tabs needed about 1300px but had about 700 next to the buttons, so the last ones (Backgrounds, Find, Story, Help) were cut off. */
+:root { --top: 106px; }
+.topbar { flex-wrap: wrap; align-content: center; row-gap: 2px; }
+.topbar .tabs { order: 5; flex: 1 0 100%; }
+.topbar .tabs .tabbtn { padding: 6px 8px; }   /* (12 tabs: a bit closer together so they all fit) */
 @media (max-width: 1400px) { .tabbtn { font-size: 14px; padding: 5px 6px; gap: 3px; } .topbar { gap: 8px; } .brand small { display: none; } .badge { display: none; } }   /* 9 tabs fit on a laptop */
 @media (max-width: 1000px) { .tabbtn .ti { display: none; } .brand { font-size: 22px; } .topbar { gap: 8px; padding: 0 10px; } }
 @media (max-width: 760px) { .topbar { height: auto; flex-wrap: wrap; padding: 6px 10px; } :root { --top: 118px; } }
@@ -123,6 +129,34 @@ main { max-width: 1600px; margin: 0 auto; padding: 16px; }
 .toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
 .toolbar .sep { width: 2px; align-self: stretch; background: var(--line-soft); margin: 0 4px; }
 .toolbar select { max-width: 340px; }
+/* [ADDED] THE SQUARES TAB */
+#sqHome #sqForm .row:last-child { display: none; }   /* (no Done button in the tab: changes count right away) */
+.sqlist { max-height: calc(100vh - var(--top) - 210px); overflow: auto; }
+.sqlist .grp { margin: 10px 0 4px; color: var(--gold); font-size: 15px; }
+.sqlist .pi { box-sizing: border-box; display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 4px 6px; border: 2px solid transparent; border-radius: 6px; background: none; color: var(--ink); cursor: pointer; font: inherit; }
+.sqlist .pi:hover { background: var(--window-lo); }
+.sqlist .pi.on { border-color: var(--gold); background: var(--window-lo); }
+.sqlist .pi > span:not(.chip) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sqlist .pi code { font-size: 11px; color: var(--ink-soft); }
+/* [ADDED] THE MUSIC EDITOR */
+.rolltracks, .rolltools { gap: 6px; flex-wrap: wrap; align-items: center; margin: 6px 0; }
+.rolltools .sep { width: 2px; align-self: stretch; background: var(--line-soft); margin: 0 4px; }
+.rollbox { position: relative; overflow: auto; max-height: 420px; border: 3px solid var(--edge); border-radius: 8px; background: #070a1c; }
+.rollchords { display: flex; position: sticky; top: 0; z-index: 3; background: var(--window); border-bottom: 2px solid var(--edge); }
+.rollcorner { position: sticky; left: 0; z-index: 4; flex: none; width: 46px; background: var(--window); font-size: 11px; color: var(--ink-soft); display: grid; place-items: center; }
+.rollbar { flex: none; display: flex; gap: 2px; padding: 3px 2px; border-left: 2px solid rgba(242,201,76,.55); }
+.rollbar select { flex: 1 1 0; min-width: 0; font-size: 12px; padding: 2px; }
+.rollrow { display: flex; align-items: flex-start; }
+.rollkeys { position: sticky; left: 0; z-index: 2; flex: none; }
+.rollgridwrap { position: relative; flex: none; }
+#rollGrid { display: block; cursor: crosshair; }
+.rollhead { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: #ff4fd8; box-shadow: 0 0 6px #ff4fd8; pointer-events: none; }
+.drumgrid { display: grid; gap: 4px; margin-top: 8px; }
+.drumrow { display: flex; gap: 3px; align-items: center; }
+.drumrow > span { width: 56px; }
+.drumcell { width: 30px; height: 26px; border: 2px solid var(--line); border-radius: 5px; background: #141832; cursor: pointer; }
+.drumcell.beat { background: #1c2142; }
+.drumcell.on { background: var(--gold); border-color: #fff6c8; }
 .workspace { display: grid; grid-template-columns: 290px minmax(0, 1fr) 300px; gap: 12px; align-items: start; }
 @media (max-width: 1200px) { .workspace { grid-template-columns: 260px minmax(0, 1fr); } .workspace .right { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } }
 @media (max-width: 760px) { .workspace { grid-template-columns: 1fr; } .workspace .right { grid-template-columns: 1fr; } }
@@ -276,7 +310,7 @@ dialog label { display: grid; gap: 3px; margin: 10px 0; font-size: 15px; }
 .sqbg label { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .sqbg select { max-width: 320px; }
 .sqbg input[type="color"] { width: 54px; height: 30px; padding: 0; border: 2px solid var(--edge); border-radius: 6px; background: none; }
-[data-a="absorb"][aria-pressed="true"] { border-color: var(--gold); background: var(--window-hi); }
+[data-a="absorb"][aria-pressed="true"] { border-color: var(--gold); background: var(--window-hi); color: var(--gold); }   /* [CHANGED] BUG FIX (Nov 23): its words were dark on dark when on */
 .current { display: flex; align-items: center; gap: 10px; margin: 8px 0; padding: 6px 8px; background: var(--window-lo); border-radius: 8px; }
 .current .pc { width: 44px; height: 44px; cursor: default; }
 .current .pc:hover { transform: none; }
@@ -370,6 +404,9 @@ details.allset[open] > summary { margin-bottom: 6px; }
     <button type="button" class="tabbtn" data-tab="world" disabled><span class="ti" data-icon="scroll"></span>World</button>
     <button type="button" class="tabbtn" data-tab="music" disabled><span class="ti ti-glyph">♪</span>Music</button>
     <button type="button" class="tabbtn" data-tab="backgrounds" disabled><span class="ti ti-glyph">▦</span>Backgrounds</button>
+    <button type="button" class="tabbtn" data-tab="squares" disabled><span class="ti" data-icon="tree"></span>Squares</button>   <!-- [ADDED] THE SQUARES TAB -->
+    <button type="button" class="tabbtn" data-tab="find" disabled><span class="ti" data-icon="telescope"></span>Find</button>   <!-- [ADDED] FIND -->
+    <button type="button" class="tabbtn" data-tab="story" disabled><span class="ti" data-icon="book"></span>Story</button>   <!-- [ADDED] THE STORY AS A LIST -->
     <button type="button" class="tabbtn" data-tab="help"><span class="ti" data-icon="sign"></span>Help</button>
   </nav>
   <div class="actions" id="saveBox" hidden>
@@ -409,6 +446,7 @@ details.allset[open] > summary { margin-bottom: 6px; }
     <span>Working on <b id="openedName"></b></span>
     <span class="muted small" id="openedInfo"></span>
     <span style="flex:1"></span>
+    <button type="button" class="btn sm" id="importBtn" title="Bring the changes from another copy of your game (made in another Game Maker) into this one">Bring in changes from another file…</button>   <!-- [ADDED] BRING IN CHANGES -->
     <button type="button" class="btn sm" data-a="reopen">Open a different file</button>
   </div>
 
@@ -419,7 +457,9 @@ details.allset[open] > summary { margin-bottom: 6px; }
       <button type="button" class="btn sm" data-a="newMap">+ New map</button>
       <button type="button" class="btn sm" data-a="newEntrance">+ New entrance</button>
       <button type="button" class="btn sm" data-a="newDoor">+ New door or stairs</button>
+      <button type="button" class="btn sm" data-sq="new" data-sqcode="" title="A brand-new square: give it a name, then its picture, color and the rest">+ New square</button>   <!-- [ADDED] -->
       <button type="button" class="btn sm" data-a="newShop">+ New shop</button>
+      <button type="button" class="btn sm" id="stopGuessBtn" title="Stop the game guessing the ground behind pictures from the squares around them">Stop guessing grounds…</button>   <!-- [ADDED] NO MORE GUESSING -->
       <span class="sep"></span>
       <button type="button" class="btn sm" data-a="tool" data-t="paint" title="Click or drag to paint (P)">Paint</button>
       <button type="button" class="btn sm" data-a="tool" data-t="fill" title="Fill an area of the same squares (F)">Fill</button>
@@ -477,6 +517,9 @@ details.allset[open] > summary { margin-bottom: 6px; }
   <section class="mtab" id="tab-world" hidden></section>
   <section class="mtab" id="tab-music" hidden></section>
   <section class="mtab" id="tab-backgrounds" hidden></section>
+  <section class="mtab" id="tab-squares" hidden></section>   <!-- [ADDED] THE SQUARES TAB -->
+  <section class="mtab" id="tab-find" hidden></section>   <!-- [ADDED] FIND -->
+  <section class="mtab" id="tab-story" hidden></section>   <!-- [ADDED] THE STORY AS A LIST -->
   <section class="help" id="tab-help" hidden></section>
 </main>
 
@@ -558,7 +601,7 @@ async function openGame(text, name, handle) {
   FILE_NAME = name || 'index.html';
   FILE_HANDLE = handle || null;
   // start fresh (a different file, or the same one again)
-  Object.assign(ed, { id: 'world', maps: {}, tile: '.', tool: 'paint', undo: {}, redo: {}, filter: '', painting: false, last: null, changed: {}, newTiles: {}, imgs: {}, colors: {}, flash: null });
+  Object.assign(ed, { id: 'world', maps: {}, tile: '.', tool: 'paint', undo: {}, redo: {}, filter: '', painting: false, last: null, changed: {}, newTiles: {}, imgs: {}, colors: {}, lookImgs: {}, flash: null });   // [ADDED] lookImgs: a new file's looks
   tilesMemo = { base: null, key: null, all: null };
   G = null;
   if (typeof makerReset === 'function') makerReset();
@@ -630,7 +673,8 @@ function classOf(t, x, y, floorCode) {
   if (t.raised) return `${t.look || 'rd-roof'} raised${(x + y) % 2 ? ' alt' : ''}`;   // rooftops, overpasses, catwalks: a floor up, with their own look
   if (t.kind === 'wall' || t.look === 'wall') return 'wall';
   if (t.soon) return 'soon';
-  const stripe = (x + y) % 2 ? 'alt' : '';
+  const gaps = typeof mk !== 'undefined' && mk.cur && mk.cur.balance && mk.cur.balance.game && Number(mk.cur.balance.game.squareGaps);   // [ADDED] LOOKS: like the game (no checkerboard without gaps)
+  const stripe = (x + y) % 2 && gaps ? 'alt' : '';
   let ground = t.marsh ? `marsh ${stripe}` : stripe;
   if (t.look) ground = `${t.look} ${stripe}`;
   return t.kind === 'blocked' ? `${ground} blocked` : ground;
@@ -685,19 +729,104 @@ function groundAround(grid, x, y, all, floor) {
   }
   return null;
 }
+// [ADDED] NO MORE GUESSING (Luna, Nov 23: "this system where it automatically changes to the tiles nearby is so annoying: I want to
+// change it myself, not have a clunky AI do it"). Stop guessing… (Maps tab) keeps the ground every picture shows right now, written
+// down for each spot, and turns the guessing off for good (Balance → Pictures). After that a spot only changes when you change it:
+// Keep what's under on, pick a ground, click the thing (or set one ground for every copy: Squares tab → Behind its picture).
+function noGuessing() { return Boolean(mk.cur && mk.cur.balance && mk.cur.balance.game && Number(mk.cur.balance.game.noAutoGround)); }
+function groundCodeNear(grid, x, y, all, g, floorCode) {   // the ground square around it that the guess came from
+  for (let r = 1; r <= 3; r++) {
+    const votes = {};
+    for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+      const code = (grid[y + dy] || [])[x + dx], t = code === '@' ? null : all[code];
+      if (!t || t.kind !== 'ground' || hasPicture(t) || t.wade) continue;
+      const fl = floorCode && all[floorCode];
+      const look = t.look || (fl && !t.marsh ? fl.look : undefined), marsh = Boolean(t.marsh || (fl && !t.look && !t.marsh ? fl.marsh : false));
+      const eff = !t.look && !t.marsh && floorCode ? floorCode : code;   // (a plain square on a map with a floor shows the floor: use the floor itself)
+      if ((look || undefined) === (g.look || undefined) && marsh === Boolean(g.marsh)) votes[eff] = (votes[eff] || 0) + 1;
+    }
+    const best = Object.entries(votes).sort((a, b) => b[1] - a[1])[0];
+    if (best) return best[0];
+  }
+  return floorCode || null;
+}
+function bakeGrounds() {
+  const all = tiles();
+  let n = 0;
+  Object.entries(ed.maps).forEach(([id, mp]) => {
+    const floor = mp.floor ? all[mp.floor] : null;
+    const guessed = [];
+    mp.grid.forEach((row, y) => row.forEach((code, x) => {
+      if (!code || code === '@' || String(code).indexOf('~') > 0) return;
+      const t = all[code];
+      if (!t || t.look || t.marsh || t.kind === 'wall' || t.bg || t.color || !hasPicture(t)) return;
+      const g = groundAround(mp.grid, x, y, all, floor);
+      const gc = g && groundCodeNear(mp.grid, x, y, all, g, mp.floor);
+      if (gc) guessed.push([x, y, `${code}~${gc}`]);
+    }));
+    if (!guessed.length) return;
+    if (!ed.undo[id]) { ed.undo[id] = []; ed.redo[id] = []; }
+    ed.undo[id].push(mp.grid.map(r => r.slice()));
+    guessed.forEach(([x, y, c]) => { mp.grid[y][x] = c; });
+    ed.changed[id] = true;
+    n += guessed.length;
+  });
+  mk.cur.balance.game.noAutoGround = true;
+  tilesChanged();
+  renderAll();
+  return n;
+}
+function stopGuessing() {
+  if (!mk.ready) return;
+  if (noGuessing()) return toast('The guessing is already off. To change one spot: Keep what’s under on, pick a ground, click the thing.', 8000);
+  if (!confirm('Stop guessing the ground behind pictures?\n\nEvery picture keeps the ground it has right now (written down for each spot, on every map), and from now on it only changes when you change it.\n\n(If you’re bringing in changes from another file, do that first.)')) return;
+  const n = bakeGrounds();
+  toast(`Done: ${n} spots kept their ground, and the guessing is off. Change a spot: Keep what’s under on, pick a ground, click the thing. Then Save or Publish.`, 12000);
+}
+document.addEventListener('click', ev => { if (ev.target.closest && ev.target.closest('#stopGuessBtn')) stopGuessing(); });
 function squareColor(code, x, y, mapId, alone) {
-  if (code === '@') return colorOf(classOf(tiles()[ed.maps[mapId].floor || '.'] || { kind: 'ground' }, x, y));
+  ed.lastCls = null;   // [ADDED] SQUARES LIKE THE GAME: the look it worked out (draw() uses it for the pattern)
+  if (code === '@') return colorOf(ed.lastCls = classOf(tiles()[ed.maps[mapId].floor || '.'] || { kind: 'ground' }, x, y));
   const t = tileOf(code);
   if (!t) return '#ff00ff';
   if (t.color) return t.color;   // [ADDED] ANY COLOR: a square with its own color
   let shown = t;
   if (t.bg && !(code.indexOf('~') > 0) && tiles()[t.bg]) { const u = tiles()[t.bg]; if (u.color) return u.color; shown = { ...t, look: u.look, marsh: u.marsh }; }   // [ADDED] its own ground behind it
-  else if (!alone && !t.look && !t.marsh && t.kind !== 'wall' && !t.bg && hasPicture(t)) {
+  else if (!alone && !t.look && !t.marsh && t.kind !== 'wall' && !t.bg && hasPicture(t) && !noGuessing()) {   // [ADDED] noGuessing: NO MORE GUESSING
     const all = tiles(), floor = ed.maps[mapId].floor ? all[ed.maps[mapId].floor] : null;
     const g = groundAround(ed.maps[mapId].grid, x, y, all, floor);
     if (g) shown = { ...t, look: g.look, marsh: g.marsh };
   }
-  return colorOf(classOf(shown, x, y, ed.maps[mapId].floor));
+  return colorOf(ed.lastCls = classOf(shown, x, y, ed.maps[mapId].floor));
+}
+// [ADDED] SQUARES LIKE THE GAME (Luna, Nov 23: "some of the tiles in game and in the Game Maker don't match"). Each square
+// here used to be one flat color (the most solid color of its look), so road lines, stripes, roofs and patterns were missing
+// and different squares looked the same. Now a look with a pattern is drawn from the game's own CSS, the way the game shows it
+// (the flat color shows for a moment while it loads).
+const LOOK_PX = 40;
+function lookImg(cls) {
+  if (!cls || ed.noLooks) return null;
+  ed.lookImgs = ed.lookImgs || {};
+  if (cls in ed.lookImgs) { const i = ed.lookImgs[cls]; return i && i.complete && i.naturalWidth ? i : null; }
+  ed.lookImgs[cls] = null;
+  try {
+    const d = frame.contentDocument, box = d.createElement('div'), el = d.createElement('div');
+    box.className = 'map mega'; box.style.cssText = 'position:absolute;left:-999px;top:0';
+    el.className = 'tile ' + cls; el.style.cssText = `position:absolute;width:${LOOK_PX}px;height:${LOOK_PX}px`;
+    box.appendChild(el); d.body.appendChild(box);
+    const cs = frame.contentWindow.getComputedStyle(el);
+    const pattern = /gradient/.test(cs.backgroundImage || '') || (cs.boxShadow && cs.boxShadow !== 'none');
+    const css = ['background-color', 'background-image', 'background-size', 'background-position', 'background-repeat', 'box-shadow'].map(p => `${p}:${cs.getPropertyValue(p)}`).join(';');
+    box.remove();
+    if (!pattern) return null;   // one plain color: the flat color is right already
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${LOOK_PX}" height="${LOOK_PX}"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml" style="width:${LOOK_PX}px;height:${LOOK_PX}px;${css.replace(/"/g, "'")}"></div></foreignObject></svg>`;
+    const i = new Image();
+    i.onload = () => draw();
+    i.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    ed.lookImgs[cls] = i;
+  } catch (e) {}
+  return null;
 }
 function img(name) {
   if (!name || !G.SPRITE_URLS[name]) return null;
@@ -768,6 +897,7 @@ function draw() {
     const code = Gd[y][x];
     g.fillStyle = squareColor(code, x, y, ed.id);
     g.fillRect(x * z, y * z, z, z);
+    { const li = lookImg(ed.lastCls); if (li) g.drawImage(li, x * z, y * z, z, z); }   // [ADDED] SQUARES LIKE THE GAME
     if (code === '@') {
       g.fillStyle = '#fff'; g.font = `bold ${Math.max(8, z - 4)}px sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
       g.fillText('@', x * z + z / 2, y * z + z / 2 + 1);
@@ -1130,7 +1260,7 @@ function newDoor() {
 }
 
 /* ===================== SAVING ===================== */
-function jsText(s) { return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
+function jsText(s) { return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/</g, '\\x3c').replace(/\r?\n/g, '\\n'); }   // [CHANGED] BUG FIX (Nov 23): a name with a closing script tag in it broke the whole game file; new lines too
 function rowsOf(g) { return g.map(r => r.map(c => c.padEnd(2)).join(' ').trimEnd()); }
 function rowsCode(rows) { return rows.map(r => `      '${jsText(r)}',`).join('\n'); }
 function tileLine(code, t) {
@@ -1167,7 +1297,9 @@ function buildFile() {
     const m = ed.maps[id];
     if (m.isNew && !src.includes(`\n  ${id}: {\n`)) { src = src.replace('const MAPS = {\n', 'const MAPS = {\n' + newMapCode(id, m)); return; }
     const out = replaceRows(src, id, rowsOf(m.grid));
-    if (out) src = out; else missing.push(m.name);
+    if (out) src = out;
+    else if (typeof mk !== 'undefined' && mk.ready && SRC.includes('PAINTED ROOMS')) (mk.mapRows = mk.mapRows || {})[id] = rowsOf(m.grid);   // [ADDED] PAINTED ROOMS: a map the game builds with code keeps your painting in the Game Maker's changes
+    else missing.push(m.name);
   });
   if (typeof makerApply === 'function') src = makerApply(src);   // enemies, items, people (see GAME MAKER)
   return { src, missing };
@@ -1263,7 +1395,9 @@ function test() {
   else say('Opened a test copy in a new tab.', 'saveMsg');
 }
 function png() {
+  ed.noLooks = true; draw();   // [ADDED] SQUARES LIKE THE GAME: the picture you save uses the flat colors (the browser won't save the patterns)
   $('cv').toBlob(b => {
+    ed.noLooks = false; draw();
     const a = document.createElement('a');
     a.href = URL.createObjectURL(b);
     a.download = `${ed.id}.png`;
@@ -1403,7 +1537,7 @@ function makerReset() {
 }
 // Anything you change: the top bar says so, and the page asks before you close it (or saves it online).
 function markUnsaved() { mk.unsaved = true; onlineChanged(); updateBadge(); }
-function markSaved() { mk.unsaved = false; updateBadge(); }
+function markSaved() { mk.unsaved = false; mk.imported = false; updateBadge(); }
 function updateBadge() {
   const b = $('changesBadge');
   if (!b) return;
@@ -1466,7 +1600,7 @@ function makerOpened(w) {
     Object.values(mk.base.items || {}).forEach(it => { if (it && typeof it.about === 'string') it.about = it.about.replace(/\s*(Map moves|On the map): .*$/, ''); });   // [ADDED] "On the map:": a weapon's fight skill on the map (the game adds that too)
     mk.base.tiles = {};   // [ADDED] SQUARES YOU CAN CHANGE (not the "thing~ground" ones: those come from painting)
     Object.entries(G.TILES || {}).forEach(([c, t]) => { if (!(c.indexOf('~') > 0) && t && typeof t === 'object') mk.base.tiles[c] = clone(t); });
-    mk.tilesVer = 0; mk.newColors = {};
+    mk.tilesVer = 0; mk.newColors = {}; mk.storyChanged = false; mk.mapRows = {}; mk.cur && delete mk.cur.story;
     mk.cur = clone(mk.base);
     if (raw.WORLD) { const all = {}; WORLD_TABLES.forEach(t => { all[t] = mk.cur[t]; }); all.shops = mk.cur.shops; mk.cur.world = { all }; mk.base.world = { all: {} }; }   // the World tab's fields live at forms.x.y and so on   // [ADDED] all.shops: World → Shops
     G.ENEMIES = mk.cur.enemies;   // the map painter shows your changes too
@@ -1519,7 +1653,7 @@ function showTab(tab, section) {
   $('welcome').hidden = tab !== 'welcome';
   $('openedBar').hidden = !opened || tab === 'help';
   $('editor').hidden = tab !== 'maps';
-  ['enemies', 'items', 'npcs', 'balance', 'world', 'music', 'backgrounds'].forEach(t => { const el = $('tab-' + t); if (el) el.hidden = tab !== t; });
+  ['enemies', 'items', 'npcs', 'balance', 'world', 'music', 'backgrounds', 'squares', 'find', 'story'].forEach(t => { const el = $('tab-' + t); if (el) el.hidden = tab !== t; });   // [ADDED] find, story
   if (tab !== 'music') stopPreview();   // [ADDED] MUSIC
   $('tab-help').hidden = tab !== 'help';
   $('tryMapBtn').hidden = tab !== 'maps';
@@ -1532,6 +1666,9 @@ function showTab(tab, section) {
   else if (tab === 'welcome') renderOnline();
   else if (tab === 'balance') renderBalanceTab();
   else if (tab === 'world') renderWorldTab();
+  else if (tab === 'squares') renderSquaresTab();   // [ADDED] THE SQUARES TAB
+  else if (tab === 'find') renderFindTab();   // [ADDED] FIND
+  else if (tab === 'story') renderStoryTab();   // [ADDED] THE STORY AS A LIST
   else renderMakerTab(tab);
   window.scrollTo(0, 0);
 }
@@ -1781,6 +1918,7 @@ function renderMakerTab(tab, keep) {
   const winY = window.scrollY;
   const listEl = box.querySelector('.mlist .palette');
   const listY = listEl ? listEl.scrollTop : 0;
+  const rb0 = $('rollBox'), rollPos = rb0 && mk.rollScrolled ? [rb0.scrollLeft, rb0.scrollTop, mk.sel.music] : null;   // [ADDED] THE MUSIC EDITOR: stay where you were
   const act = document.activeElement;
   const focusKey = act && act.dataset && act.dataset.p && box.contains(act) ? act.dataset.p : null;
   const title = { enemies: 'Enemies', items: 'Items', npcs: 'People and what they say', music: 'Music', backgrounds: 'Fight backgrounds' }[tab];
@@ -1798,6 +1936,12 @@ function renderMakerTab(tab, keep) {
   box.querySelector('.mlist .palette').scrollTop = listY;
   if (keep) window.scrollTo(0, winY);
   if (focusKey) { const el = box.querySelector(`[data-p="${CSS.escape(focusKey)}"]`); if (el) el.focus({ preventScroll: true }); }
+  if (tab === 'music') {   // [ADDED] THE MUSIC EDITOR
+    const keepRoll = rollPos && rollPos[2] === mk.sel.music && mk.rollScrolled;
+    drawRoll();
+    const rb = $('rollBox'); if (rb && keepRoll) { rb.scrollLeft = rollPos[0]; rb.scrollTop = rollPos[1]; }
+    if (mk.playing) startRollHead();
+  }
   refreshSide();
 }
 function tabIntro(tab) {
@@ -1851,6 +1995,8 @@ const FX_MOVE = [
   { id: 'buff', name: 'Gets stronger', add: a => { a.buff = { atk: 5, turns: 3 }; }, html: p => `+${F.num(p('buff.atk'), { min: 1, w: 64 })} attack for ${F.num(p('buff.turns'), { min: 1, w: 60 })} turns` },
   { id: 'summon', name: 'Calls for help', add: (a, e, id) => { a.summon = id; }, html: p => `${F.select(p('summon'), enemyOptions(), { none: false, w: 220 })} comes running (you fight it next)` },
   { id: 'cleanse', name: 'Shakes it all off', add: a => { a.cleanse = true; }, html: () => 'everything you put on it goes away' },
+  { id: 'video', name: 'Plays a video (a big attack’s animation)', add: a => { a.video = 'videos/my-attack.mp4'; }, del: a => { delete a.video; delete a.videoOnce; },   // [ADDED] VIDEO CUTSCENES
+    html: p => `${videoField(p('video'), 'sel', null)} ${F.check(p('videoOnce'), 'only the first time')}` },
   { id: 'say', name: 'Says something first', add: a => { a.say = 'It roars!'; }, html: p => F.text(p('say'), { ph: 'like: Its eyes start to glow!', w: 320 }) },
   { id: 'tell', name: 'Warns you a turn early', add: (a, e) => { a.tell = `The ${e.name || 'enemy'} gets ready for something big!`; a.counter = 'defend'; }, del: a => { delete a.tell; delete a.counter; },
     html: p => `${F.text(p('tell'), { ph: 'like: The Ogre raises its club high!', w: 320 })} <span>counter:</span> ${F.select(p('counter'), Object.entries(mk.counters).map(([k, v]) => [k, `${k}: ${v}`]), { none: false })}` },
@@ -2256,8 +2402,58 @@ function pictureCard(id, it) {
         + F.fld('Colors', F.select('handColors', colors, { none: 'as it is' }))
         + F.fld('Looks like', drawn ? `<span class="spr big" style="width:64px;height:64px;background-image:url('${drawn}')"></span>` : '<span class="muted small">(can’t draw it here)</span>')
         : !it.icon && gameIconUrl(id) ? F.fld('Looks like now', `<span class="spr big" style="width:64px;height:64px;background-image:url('${gameIconUrl(id)}')"></span>`) : ''}
+      ${gearDrawFields(id, it)}
     </div>
   </div>`;
+}
+// [ADDED] DRAWN GEAR (Luna, Nov 23: "I can't make sprites for when someone is holding something or wearing armor").
+// Weapons and staffs: draw how you hold it (heldPic). Armor: draw on top of how it looks on you (wornPic), or instead of it (wornOnly).
+function inPicRow(html, extra) { const i = html.lastIndexOf('</span>'); return extra && i >= 0 ? html.slice(0, i) + extra + html.slice(i) : html + extra; }   // a button in the same row as the picture's buttons
+function gearDrawFields(id, it) {
+  const gear = it.type === 'weapon' || it.type === 'magic', armor = it.type === 'armor';
+  if (!gear && !armor) return '';
+  const path = gear ? 'heldPic' : 'wornPic', on = gearPreviewUrl(id, it);
+  return '<div style="grid-column:1 / -1">' + F.fld(gear ? 'Drawn in your hand' : 'Worn on you', inPicRow(pictureField(path), it[path] ? `<button type="button" class="btn sm" data-mk="picClear" data-path="${path}" title="Back to the automatic look">✕ none</button>` : ''),   // (the whole row wide, so its buttons fit)
+      gear ? 'draw exactly how you hold it. A new drawing starts as the shape above, with you shown faintly underneath. A drawing wins over the shape and colors'
+        : 'draw on top of how this armor looks on you: wings, capes, glowing bits. You’re shown faintly underneath while you draw') + '</div>'
+    + (armor && it.wornPic ? F.fld('Only my drawing', F.check('wornOnly', 'Plain clothes under it'), 'tick to leave out the armor’s automatic look and show only what you drew') : '')
+    + (on ? F.fld('On you', `<span class="spr big" style="width:64px;height:64px;background-image:url('${on}')"></span>`) : '');
+}
+// You wearing or holding it, with the drawing from here (the game's own pieces, so it matches the game)
+function gearBaseRows(armorId, plain) {
+  return frame.contentWindow.eval(`(() => { const a = ${plain || !armorId ? 'NO_ARMOR_LOOK' : `ARMOR_LOOKS[${JSON.stringify(armorId)}] || DEFAULT_ARMOR_LOOK`}; let rows = PLAYER_BASE; (a.parts || []).forEach(p => { if (ARMOR_PARTS[p]) rows = layer(rows, ARMOR_PARTS[p]); }); if (a.helmet) rows = layer(rows, HELMETS[a.helmet]); return recolor(rows, a.colors); })()`);
+}
+function gearPreviewUrl(id, it) {
+  try {
+    const w = frame.contentWindow, pic = n => (n && Array.isArray(mk.allSprites[n]) ? mk.allSprites[n] : null);
+    if (it.type === 'armor') {
+      let rows = gearBaseRows(id, it.wornOnly && pic(it.wornPic));
+      if (pic(it.wornPic)) rows = w.layerDrawn(rows, pic(it.wornPic));
+      return w.drawPixels(w.shadeRows(rows));
+    }
+    return pic(it.heldPic) ? w.drawPixels(w.shadeRows(w.layerDrawn(gearBaseRows(null, true), pic(it.heldPic)))) : '';
+  } catch (e) { return ''; }
+}
+// What the picture editor starts with for a new drawing, and the faint you underneath
+function gearDrawOpts(obj, path) {
+  if (path !== 'heldPic' && path !== 'wornPic') return null;
+  const id = Object.keys(mk.cur.items || {}).find(k => mk.cur.items[k] === obj);
+  if (!id) return null;
+  const o = { name: `${id}${path === 'heldPic' ? 'Held' : 'Worn'}` };
+  try {
+    o.guide = gearBaseRows(path === 'wornPic' ? id : null, path === 'heldPic' || obj.wornOnly);
+    if (path === 'heldPic') o.start = frame.contentWindow.eval(`(() => { const w = handLook(${JSON.stringify(id)}, ${JSON.stringify(obj.hand)}, ${JSON.stringify(obj.handColors)}) || baseWeaponLook(${JSON.stringify(id)}); return recolor(WEAPON_SHAPES[w.shape] || WEAPON_SHAPES.sword, { ...w.colors, h: 's' }); })()`);
+  } catch (e) {}
+  return o;
+}
+// [ADDED] WINGS: armor you can fly with (the game: press Q on the map)
+function wingsCard() {
+  return `<div class="card"><h4>Wings <span class="hint">Press Q on the map to fly for a while: faster, and over people walking around.</span></h4><div class="fgrid">
+    ${F.fld('Seconds in the air', F.num('fly.seconds', { min: 0, step: 0.5, ph: 'can’t fly' }), 'empty or 0: this armor can’t fly')}
+    ${F.fld('Speed in the air', F.num('fly.speed', { min: 1, step: 0.5, ph: '2' }), '2: twice as fast as walking')}
+    ${F.fld('Rest between flights', F.num('fly.cooldown', { min: 0, ph: '0' }), 'seconds before you can take off again')}
+    ${F.fld('Enemies', F.check('fly.overEnemies', 'Fly over enemies too'))}
+  </div></div>`;
 }
 // [ADDED] the maps a shop's door is on (not counting the shop's own room)
 function shopPlaces(sid) {
@@ -2292,13 +2488,38 @@ function itemForm(id) {
       </div>
     </div>
     ${pictureCard(id, it)}
+    ${t === 'spell' ? `<div class="card"><h4>Animation <span class="hint">A video that plays full screen when you cast it (for the big ones).</span></h4>${F.fld('Video', videoField('video', 'sel', it.video), 'a file next to index.html on GitHub (mp4 or webm) or a YouTube link. Empty: no video', true)}${F.fld('How often', F.check('videoOnce', 'only the first time'))}</div>` : ''}   <!-- [ADDED] VIDEO CUTSCENES -->
     ${extras ? `<div class="card"><h4>${t === 'spell' ? 'What it does' : 'Special things'}</h4>${extras}</div>` : ''}
     ${['weapon', 'magic', 'armor'].includes(t) ? mapMovesCard(it, false) : ''}
+    ${t === 'armor' ? wingsCard() : ''}
     <div class="card"><h4>Description <span class="hint">What the shop and your bag say about it.</span></h4>
       ${F.area('about', { rows: 3, ph: 'like: +5 attack.' })}
       <div class="row"><button type="button" class="btn sm" data-mk="writeAbout">Write it for me</button><span class="muted small">(from its numbers: check it, then change what you like)</span></div>
     </div>
-    <div class="card"><h4>Sold at</h4><div class="pills">${shops}</div></div>`;
+    <div class="card"><h4>Sold at</h4><div class="pills">${shops}</div></div>
+    ${itemSourcesCard(id)}`;
+}
+
+// [ADDED] WHERE IT COMES FROM (Luna, Nov 23: "if it's not bought from a store I don't know where it's dropped from").
+// Every enemy, boss and chest that gives this item, with its chance. Change the chances on the enemy itself.
+function itemSourcesCard(id) {
+  const from = [];
+  Object.entries(mk.cur.enemies || {}).forEach(([eid, e]) => {
+    if (!e) return;
+    const who = esc(e.name || eid);
+    (e.drops || []).forEach(d => { if (d && d.item === id) from.push(`${who} <span class="muted small">${Math.round((Number(d.chance) || 0) * 1000) / 10}%</span>`); });
+    (e.bossDrops || []).forEach(d => { if (d && d.item === id) from.push(`${who} <span class="muted small">boss drop, ${Number(d.chance) || 0}%</span>`); });
+  });
+  let chests = {};
+  try { chests = frame.contentWindow.eval('CHEST_LOOT') || {}; } catch (e) {}
+  Object.entries(chests).forEach(([key, loot]) => {
+    if (!loot || loot.item !== id) return;
+    const [map, xy] = key.includes(':') ? key.split(':') : ['world', key];
+    from.push(`Chest in ${esc((G && G.MAPS[map] && G.MAPS[map].name) || map)} <span class="muted small">at ${esc(xy)}</span>`);
+  });
+  return `<div class="card"><h4>Where it comes from <span class="hint">Enemies, bosses and chests that give it.</span></h4>
+    ${from.length ? `<div class="pills">${from.map(s => `<span class="pill">${s}</span>`).join('')}</div>`
+      : '<p class="muted small">Nothing drops it and no chest has it. Add it to an enemy’s drops or a boss’s drops to make it findable.</p>'}</div>`;
 }
 // The description, made from its numbers.
 function aboutFor(it) {
@@ -2585,7 +2806,7 @@ async function makerAction(act, b) {
   if (act === 'pickPic') return pickPicture(getPath(obj, b.dataset.path), name => { setPath(obj, b.dataset.path, name); redraw(); });
   if (act === 'dupPic') return duplicatePicture(getPath(obj, b.dataset.path), name => { setPath(obj, b.dataset.path, name); redraw(); });   // [ADDED] DUPLICATE A PICTURE
   if (act === 'picClear') { setPath(obj, b.dataset.path, undefined); markUnsaved(); return redraw(); }   // [ADDED] MAP COMBAT 2
-  if (act === 'draw') return pixelEditor(getPath(obj, b.dataset.path), name => { setPath(obj, b.dataset.path, name); redraw(); });
+  if (act === 'draw') { const go = gearDrawOpts(obj, b.dataset.path) || {}; return pixelEditor(getPath(obj, b.dataset.path) || go.name, name => { setPath(obj, b.dataset.path, name); redraw(); }, go); }   // [ADDED] go: DRAWN GEAR
   const lvl = () => { const el = tabEl().querySelector('#testLevel'); mk.testLevel = Math.max(1, Math.min(99, Number(el && el.value) || 10)); return mk.testLevel; };
   if (act === 'testFight') return testGame(`state.level = ${lvl()}; state.hp = maxHp(); state.mp = maxMp(); startBattle(${JSON.stringify(mk.sel.enemies)}, { stayPut: true });`, `Test fight: ${obj.name}`);
   if (act === 'testItem') {
@@ -2632,6 +2853,37 @@ document.addEventListener('change', ev => {
 });
 
 /* ---------------------------------------------------------------- MAP SETTINGS (Maps tab) */
+// [ADDED] TRANSITIONS (Luna, Nov 23: "I can't do transitions, like I walk and I appear somewhere else"). Each edge of a map
+// can lead to another map: pick the map and where you appear (or "same street carries on": you come out level with where
+// you left). Doors, stairs and entrances are still the + New buttons at the top.
+function edgeRows(id, s) {
+  const ex = (s.exits !== undefined ? s.exits : G.MAPS[id] && G.MAPS[id].exits) || {};
+  const maps = Object.entries(ed.maps).filter(([mid]) => mid !== id).sort((a, b) => String(a[1].name || a[0]).localeCompare(String(b[1].name || b[0])));
+  const sides = { left: 'Left edge', right: 'Right edge', top: 'Top edge', bottom: 'Bottom edge', any: 'Any other edge' };
+  return Object.entries(sides).map(([side, label]) => {
+    const e = ex[side] || {};
+    return `<div class="small" style="margin:4px 0"><b>${label}</b> → <select data-edge="${side}" data-f="map"><option value="">${side === 'any' ? 'back where you came in' : 'same as “any other edge”'}</option>${maps.map(([mid, m]) => `<option value="${attr(mid)}"${e.map === mid ? ' selected' : ''}>${esc(m.name || mid)}</option>`).join('')}</select>
+      ${e.map ? `at <input type="number" min="0" style="width:4.5em" data-edge="${side}" data-f="x" value="${attr(e.x ?? '')}" placeholder="x"> <input type="number" min="0" style="width:4.5em" data-edge="${side}" data-f="y" value="${attr(e.y ?? '')}" placeholder="y">
+      <label class="ck"><input type="checkbox" data-edge="${side}" data-f="keep"${e.keep ? ' checked' : ''}> same street carries on</label>` : ''}</div>`;
+  }).join('');
+}
+document.addEventListener('change', ev => {
+  const el = ev.target.closest && ev.target.closest('[data-edge]');
+  if (!el || !mk.ready) return;
+  const s = mk.cur.maps[ed.id] || (mk.cur.maps[ed.id] = {});
+  const ex = clone((s.exits !== undefined ? s.exits : G.MAPS[ed.id] && G.MAPS[ed.id].exits) || {}) || {};
+  const side = el.dataset.edge, f = el.dataset.f;
+  if (f === 'map') { if (el.value) ex[side] = Object.assign(ex[side] || {}, { map: el.value }); else delete ex[side]; }
+  else if (ex[side]) {
+    if (f === 'keep') { if (el.checked) ex[side].keep = true; else delete ex[side].keep; }
+    else { const v = el.value === '' ? NaN : Number(el.value); if (Number.isFinite(v)) ex[side][f] = v; else delete ex[side][f]; }
+  }
+  s.exits = ex;
+  if (G.MAPS[ed.id]) G.MAPS[ed.id].exits = ex;
+  markUnsaved();
+  renderMapSettings();
+  if (typeof renderAll === 'function' && f === 'map') renderAll();
+});
 function renderMapSettings() {
   const box = $('mapSettings');
   if (!box) return;
@@ -2652,6 +2904,13 @@ function renderMapSettings() {
     ${mk.cur.music ? `<label>Music here<br><select data-ms="music" data-kind="pick">${mapMusicOptions(id, s.music)}</select></label>` : ''}
     ${mk.cur.battleBgs ? `<label>Fight background<br><select data-ms="battleBg" data-kind="pick">${mapBgOptions(id, s.battleBg)}</select></label>` : ''}
     <p class="muted small">New rooms: <b>+ New map</b> at the top makes one, then <b>+ New door or stairs</b> makes a pair of squares that lead to each other: paint one here and one in the room. <b>+ New entrance</b> is a square on this map (or the world map) that takes you into another map.</p>
+    <h3>Getting in and out</h3>
+    <label>When you arrive here<br><select data-ms="transition" data-kind="pick">${[['', 'Quick fade (the usual)'], ['black', 'Fade to black'], ['slide', 'Slide in from the edge you walked off'], ['zoom', 'Zoom in'], ['none', 'Nothing (instant)']].map(([v, t]) => `<option value="${v}"${(s.transition || '') === v ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+    <p class="muted small">Walking off an edge of this map takes you to... (empty spot: that map's arrive point <b>@</b>)</p>
+    ${edgeRows(id, s)}
+    <label>Sky<br><select data-ms="sky" data-kind="pick">${[['', 'Automatic (outside: the clock; rooms: inside; the Capital: night)'], ['clock', 'Follows the clock (day and night)'], ['night', 'Always night'], ['day', 'Always day'], ['inside', 'Inside (no sky)']].map(([v, t]) => `<option value="${v}"${(s.sky || '') === v ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+    <label class="ck"><input type="checkbox" data-ms="noMap" data-kind="check"${s.noMap ? ' checked' : ''}> No map here <span class="muted small">(the corner map and M are off: for secret or confusing-on-purpose places. Dark places have none either.)</span></label>
+    <label class="ck"><input type="checkbox" data-ms="noBanner" data-kind="check"${s.noBanner ? ' checked' : ''}> Don’t show this place’s name when you come in</label>
     ${allSettingsHtml(`@maps.${id}`, { label: 'Every setting of this map' })}`;   // [ADDED] CHANGE ANYTHING (its squares are the map above)
 }
 document.addEventListener('input', ev => {
@@ -2742,12 +3001,14 @@ function colorFamilies() {
   Object.values(fam).forEach(list => list.sort((a, b) => a.l - b.l));
   return Object.entries(fam).filter(([, l]) => l.length);
 }
-function pixelEditor(name, onSave) {
+function pixelEditor(name, onSave, opts = {}) {   // [ADDED] opts: { start, guide } (DRAWN GEAR)
   const dlg = $('pixDlg');
   const src = name && mk.allSprites[name] ? clone(mk.allSprites[name]) : null;
+  const start = src || (Array.isArray(opts.start) && opts.start.length ? clone(opts.start) : null);   // [ADDED] DRAWN GEAR: a new drawing can start from something
+  const guide = Array.isArray(opts.guide) && opts.guide.length ? opts.guide : null;   // [ADDED] DRAWN GEAR: shown faintly where you haven't drawn
   // [ADDED] BIGGER PICTURES: any width and height (W x H), not just 16x16
-  let W = src ? src[0].length : 16, H = src ? src.length : 16;
-  const px = { rows: (src || Array.from({ length: H }, () => '.'.repeat(W))).map(r => r.split('')), color: 'k', mirror: false, tool: 'pen', undo: [], down: false, grid: true, bg: pixBgColor() };   // [ADDED] bg: ANY COLOR
+  let W = start ? start[0].length : 16, H = start ? start.length : 16;
+  const px = { rows: (start || Array.from({ length: H }, () => '.'.repeat(W))).map(r => r.split('')), color: 'k', mirror: false, tool: 'pen', undo: [], down: false, grid: true, bg: pixBgColor() };   // [ADDED] bg: ANY COLOR
   let cell = 26;
   const SIZES = [[16, 16], [16, 24], [16, 32], [24, 24], [24, 32], [32, 32], [32, 48], [48, 48], [48, 64], [64, 64]];
   const setSize = (nw, nh) => {   // keeps the drawing at the bottom middle (so a taller picture grows up)
@@ -2776,6 +3037,10 @@ function pixelEditor(name, onSave) {
       const c = px.rows[y][x];
       g.fillStyle = c === '.' ? px.bg : (mk.palette[c] || '#f0f');   // [ADDED] ANY COLOR: one plain background you pick (never part of the picture)
       g.fillRect(x * cell, y * cell, cell, cell);
+      if (c === '.' && guide) {   // [ADDED] DRAWN GEAR: you, faintly, under the drawing
+        const gc = (guide[y - (H - guide.length)] || '')[x - Math.floor((W - guide[0].length) / 2)];
+        if (gc && mk.palette[gc]) { g.globalAlpha = .3; g.fillStyle = mk.palette[gc]; g.fillRect(x * cell, y * cell, cell, cell); g.globalAlpha = 1; }
+      }
     }
     if (px.grid) {
       const lum = (parseInt(px.bg.slice(1, 3), 16) * 299 + parseInt(px.bg.slice(3, 5), 16) * 587 + parseInt(px.bg.slice(5, 7), 16) * 114) / 1000;   // [ADDED] ANY COLOR: grid lines you can see on your background
@@ -2896,7 +3161,16 @@ function pixelEditor(name, onSave) {
   };
   dlg.onclose = () => {
     if (dlg.returnValue !== 'ok') return;
-    const saveAs = ($('pixName').value || '').trim().replace(/[^A-Za-z0-9_]/g, '') || 'myPicture';
+    let saveAs = ($('pixName').value || '').trim().replace(/[^A-Za-z0-9_]/g, '') || 'myPicture';
+    // [ADDED] BUG FIX (Nov 23): saving a new picture under a name another picture already has replaced that picture without a word
+    // (two pictures left with an empty name both became myPicture, and the second one wiped out the first).
+    if (saveAs !== name && (mk.allSprites[saveAs] || (G && G.SPRITE_URLS[saveAs]))) {
+      if (!confirm(`There’s already a picture called “${saveAs}”. Replace it with this one?\n\n(Cancel keeps it, and saves yours as a new picture instead.)`)) {
+        let n = 2; while (mk.allSprites[saveAs + n] || (G && G.SPRITE_URLS[saveAs + n])) n++;
+        saveAs += n;
+        toast(`Saved as a new picture: ${saveAs}`, 6000);
+      }
+    }
     const rows = px.rows.map(r => r.join(''));
     mk.sprites[saveAs] = rows;
     mk.allSprites[saveAs] = rows;
@@ -2910,6 +3184,234 @@ function pixelEditor(name, onSave) {
   dlg.showModal();
   render();
 }
+
+/* ---------------------------------------------------------------- [ADDED] FIND
+   Luna, Nov 23: "I don't know where everyone is. I'm seeing temples and enemies in places and I don't know where they come
+   from, and there's no way to check." 🔎 Find (at the top): type part of a name and see everywhere it is.
+   Enemies and people: every square they start on (painted here, or put there by the game's code), plus the random fights
+   and packs an enemy is in. Squares (temples, doors, signs...): every map they're painted on. Items: who drops them and
+   who sells them. Click a spot to open that map. */
+function mapName(mid) { return (ed.maps[mid] && ed.maps[mid].name) || (G && G.MAPS[mid] && G.MAPS[mid].name) || mid; }
+function findThings(q) {
+  q = String(q || '').trim().toLowerCase();
+  if (q.length < 2) return [];
+  const all = tiles(), spots = {};   // square code -> [[map, x, y], ...]
+  Object.entries(ed.maps).forEach(([mid, m]) => (m.grid || []).forEach((row, y) => row.forEach((code, x) => { (spots[code] = spots[code] || []).push([mid, x, y]); })));
+  const tileOf = code => all[code] || all[String(code).split('~')[0]] || null;
+  let gameMaps = {}, ambush = {};
+  try { gameMaps = frame.contentWindow.eval('MAPS') || {}; ambush = frame.contentWindow.eval('AMBUSHES') || {}; } catch (e) {}
+  const placed = (test, field, id) => {
+    const at = new Map();
+    Object.entries(spots).forEach(([code, list]) => { const t = tileOf(code); if (t && test(t)) list.forEach(p => at.set(p.join(':'), p)); });
+    Object.entries(gameMaps).forEach(([mid, m]) => (m.mobStarts || []).forEach(s => { if (s && s[field] === id) at.set([mid, s.x, s.y].join(':'), [mid, s.x, s.y]); }));
+    return [...at.values()];
+  };
+  const hit = (id, o) => String(id).toLowerCase().includes(q) || String((o && o.name) || '').toLowerCase().includes(q);
+  const res = [];
+  Object.entries(mk.cur.enemies || {}).forEach(([id, e]) => {
+    if (!e || !hit(id, e)) return;
+    const fights = new Set();
+    Object.entries(ambush).forEach(([tab, a]) => { if (a && (a.enemies || []).includes(id)) Object.entries(spots).forEach(([code, list]) => { const t = tileOf(code); if (t && t.ambush === tab) list.forEach(([mid]) => fights.add(mid)); }); });
+    const rare = Object.entries(gameMaps).filter(([, m]) => m && m.rare && Object.values(m.rare).includes(id)).map(([mid]) => mapName(mid));
+    const packs = Object.entries(mk.cur.enemies).filter(([, g]) => g && ((g.pack || []).includes(id) || (g.gauntlet || []).includes(id))).map(([gid, g]) => g.name || gid);
+    res.push({ kind: e.boss ? 'Boss' : 'Enemy', tab: 'enemies', id, name: e.name || id, at: placed(t => t.enemy === id, 'enemy', id), notes: [
+      fights.size ? `Random fights in: ${[...fights].map(mapName).join(', ')}` : '',
+      rare.length ? `Shows up as a rare version in: ${rare.join(', ')}` : '',
+      packs.length ? `Fought as part of: ${packs.join(', ')}` : ''].filter(Boolean) });
+  });
+  Object.entries(mk.cur.npcs || {}).forEach(([id, n]) => { if (n && hit(id, n)) res.push({ kind: 'Person', tab: 'npcs', id, name: n.name || id, at: placed(t => t.npc === id, 'npc', id), notes: [] }); });
+  Object.entries(all).forEach(([code, t]) => {
+    if (!t || typeof t !== 'object' || t.enemy || t.npc || !hit(code, t)) return;
+    const at = Object.entries(spots).filter(([c]) => c === code || c.startsWith(code + '~')).flatMap(([, list]) => list);
+    res.push({ kind: 'Square', tab: null, id: code, name: t.name || code, at, notes: [] });
+  });
+  Object.entries(mk.cur.items || {}).forEach(([id, it]) => {
+    if (!it || !hit(id, it)) return;
+    const shops = Object.entries(mk.cur.shops || {}).filter(([, s]) => s && (s.stock || []).includes(id)).map(([sid, s]) => s.name || sid);
+    res.push({ kind: 'Item', tab: 'items', id, name: it.name || id, at: [], notes: shops.length ? [`Sold at: ${shops.join(', ')}`] : [], html: itemSourcesCard(id) });
+  });
+  Object.entries(ed.maps).forEach(([mid, m]) => { if (hit(mid, m)) res.push({ kind: 'Map', tab: 'map', id: mid, name: m.name || mid, at: [], notes: [] }); });
+  return res;
+}
+function renderFind() {
+  const q = ($('findQ') || {}).value || '';
+  const list = findThings(q), shown = list.slice(0, 30);
+  $('findOut').innerHTML = q.trim().length < 2 ? '<p class="muted">Type part of a name: temple, goblin, guard, katana...</p>'
+    : !list.length ? '<p class="muted">Nothing with that name.</p>'
+    : shown.map(r => {
+      const byMap = {};
+      r.at.forEach(([mid, x, y]) => (byMap[mid] = byMap[mid] || []).push([x, y]));
+      const maps = Object.entries(byMap).map(([mid, xs]) => `<div class="small" style="margin:4px 0"><b>${esc(mapName(mid))}</b> (${xs.length}): ${xs.slice(0, 8).map(([x, y]) => `<button type="button" class="btn sm" data-find-go="${attr(mid)}" data-x="${x}" data-y="${y}" title="Open this map">${x}, ${y}</button>`).join(' ')}${xs.length > 8 ? ' …' : ''}</div>`).join('');
+      const none = ['Enemy', 'Boss', 'Person', 'Square'].includes(r.kind) && !r.at.length && !r.notes.length ? '<p class="muted small">Not on any map yet.</p>' : '';
+      return `<div class="card"><h4>${esc(r.name)} <span class="hint">${r.kind}${r.id !== r.name ? ' · ' + esc(r.id) : ''}</span>${r.tab ? ` <button type="button" class="btn sm" data-find-open="${r.tab}" data-id="${attr(r.id)}">Open</button>` : ''}</h4>
+        ${maps}${none}${r.notes.map(n => `<p class="small">${esc(n)}</p>`).join('')}${r.html || ''}</div>`;
+    }).join('') + (list.length > shown.length ? `<p class="muted small">…and ${list.length - shown.length} more. Type more of the name.</p>` : '');
+}
+function renderFindTab() {
+  const box = $('tab-find');
+  const q = mk.findQ || '';
+  box.innerHTML = `<div class="tabhead"><h2>Find</h2><p class="muted">Where is it? Type part of a name: enemies, people, places (squares), items and maps. Click a spot to open that map with the square marked.</p></div>
+    <div class="card"><input type="search" id="findQ" placeholder="Search by name" value="${attr(q)}" style="width:100%;max-width:520px"></div>
+    <div id="findOut"></div>`;
+  renderFind();
+  const inp = $('findQ');
+  inp.focus(); inp.setSelectionRange(q.length, q.length);
+}
+document.addEventListener('input', ev => { if (ev.target.id === 'findQ') { mk.findQ = ev.target.value; renderFind(); } });
+document.addEventListener('click', ev => {
+  if (!ev.target.closest || !mk.ready) return;
+  const go = ev.target.closest('#tab-find [data-find-go]'), op = ev.target.closest('#tab-find [data-find-open]');
+  if (go) { ev.preventDefault(); ed.flash = { map: go.dataset.findGo, x: Number(go.dataset.x), y: Number(go.dataset.y) }; showTab('maps'); loadMap(go.dataset.findGo); toast(`${mapName(go.dataset.findGo)}: the square ${go.dataset.x} across, ${go.dataset.y} down (marked in pink).`, 8000); }
+  else if (op && op.dataset.findOpen === 'map') { ev.preventDefault(); showTab('maps'); loadMap(op.dataset.id); }
+  else if (op) { ev.preventDefault(); mk.sel[op.dataset.findOpen] = op.dataset.id; showTab(op.dataset.findOpen); }
+});
+
+/* ---------------------------------------------------------------- [ADDED] THE STORY AS A LIST
+   Luna, Nov 23: "I can't edit how the story of the world goes." 📜 Story (at the top): every step of the story in order.
+   A step's goal is what players are told to do (the stats bar and the Journal) until its flag is done: a boss with that id
+   beaten, or a flag the game sets (like bogCrossed). Reorder, add, remove, rewrite. Where players can actually go is still
+   up to the maps' locks (Every setting of this map → lockedBy). */
+function storyReady() {
+  if (Array.isArray(mk.cur.story)) return true;
+  try { mk.cur.story = clone(frame.contentWindow.eval('STORY')) || []; mk.cur.storyEnd = String(frame.contentWindow.eval('STORY_END') || ''); return true; }
+  catch (e) { return false; }
+}
+function renderStoryTab() {
+  const box = $('tab-story');
+  if (!storyReady()) { box.innerHTML = '<p>Open the newest index.html to use the Story tab.</p>'; return; }
+  const list = mk.cur.story;
+  const bosses = Object.entries(mk.cur.enemies || {}).filter(([, e]) => e && e.boss).map(([id, e]) => [id, `beat ${e.name || id}`]);
+  const known = [...new Map([...list.map(st => [st.flag, '']), ...(mk.flags || []).map(f => [f, '']), ...bosses]).entries()].filter(([f]) => f);
+  box.innerHTML = `<div class="tabhead"><h2>Story</h2><p class="muted">What players are told to do, step by step (the stats bar and the Journal). They see the first step that isn't done yet. A step is done when its flag is: a boss with that id beaten, or a flag the game sets. <b>{clues}</b> in a goal shows the clues found. Where players can actually go is up to the maps' locks (Maps → Every setting of this map → lockedBy).</p></div>
+    <datalist id="storyFlags">${known.map(([f, t]) => `<option value="${attr(f)}">${esc(t)}</option>`).join('')}</datalist>
+    <div class="mform">
+      <p><button type="button" class="btn sm" data-sty="first">+ Step at the start</button></p>
+      ${list.map((st, i) => `<div class="card"><h4>Step ${i + 1}${st.flag ? '' : ' <span class="hint" style="color:#e05555">needs a flag: the game skips it until it has one</span>'}</h4>
+        <div class="row">
+          <label class="small">Done when <input type="text" list="storyFlags" data-stf="flag" data-i="${i}" value="${attr(st.flag || '')}" placeholder="a boss id or flag"></label>
+          <button type="button" class="btn sm" data-sty="up" data-i="${i}"${i ? '' : ' disabled'} title="Earlier">↑</button>
+          <button type="button" class="btn sm" data-sty="down" data-i="${i}"${i < list.length - 1 ? '' : ' disabled'} title="Later">↓</button>
+          <button type="button" class="btn sm" data-sty="add" data-i="${i}">+ Step after this</button>
+          <button type="button" class="btn sm" data-sty="del" data-i="${i}">Remove</button>
+        </div>
+        <textarea rows="2" style="width:100%;margin-top:6px" data-stf="goal" data-i="${i}" placeholder="What players are told to do">${esc(st.goal || '')}</textarea></div>`).join('')}
+      <div class="card"><h4>When every step is done</h4><textarea rows="2" style="width:100%" data-stf="end">${esc(mk.cur.storyEnd || '')}</textarea></div>
+    </div>`;
+}
+function storyChanged() { mk.storyChanged = true; markUnsaved(); }
+document.addEventListener('input', ev => {
+  const el = ev.target.closest && ev.target.closest('#tab-story [data-stf]');
+  if (!el || !Array.isArray(mk.cur.story)) return;
+  if (el.dataset.stf === 'end') mk.cur.storyEnd = el.value;
+  else mk.cur.story[Number(el.dataset.i)][el.dataset.stf] = el.dataset.stf === 'flag' ? el.value.trim() : el.value;
+  storyChanged();
+});
+document.addEventListener('click', ev => {
+  const b = ev.target.closest && ev.target.closest('#tab-story [data-sty]');
+  if (!b || !Array.isArray(mk.cur.story)) return;
+  ev.preventDefault();
+  const list = mk.cur.story, i = Number(b.dataset.i), act = b.dataset.sty;
+  if (act === 'up' && i > 0) [list[i - 1], list[i]] = [list[i], list[i - 1]];
+  else if (act === 'down' && i < list.length - 1) [list[i + 1], list[i]] = [list[i], list[i + 1]];
+  else if (act === 'add') list.splice(i + 1, 0, { flag: '', goal: '' });
+  else if (act === 'first') list.unshift({ flag: '', goal: '' });
+  else if (act === 'del') { if (!confirm(`Remove step ${i + 1}?`)) return; list.splice(i, 1); }
+  else return;
+  storyChanged();
+  renderStoryTab();
+});
+document.addEventListener('click', ev => {
+  if (!ev.target.closest) return;
+  const car = ev.target.closest('[data-carpic]');   // [ADDED] CARS: their pictures
+  if (car && mk.ready) { ev.preventDefault(); pixelEditor(car.dataset.carpic, () => renderBalanceTab()); }
+});
+
+/* ---------------------------------------------------------------- [ADDED] BRING IN CHANGES
+   Luna, Nov 23: "in a different Game Maker I made a lot of changes: port them over to this one." Bring in changes from
+   another file… (next to Open a different file): pick the other copy of index.html. It reads that copy's Game Maker changes
+   (enemies, items, people, pictures, squares, songs, the story...) and runs it hidden to compare its maps with yours. You pick
+   what to bring over, and which one wins when both copies changed the same thing. Your own changes so far are kept. */
+function mergeChanges(mine, theirs, preferTheirs) {
+  const out = clone(mine) || {};
+  Object.entries(theirs || {}).forEach(([k, v]) => {
+    if (k === 'log') { out.log = [...(Array.isArray(v) ? v : []), ...(Array.isArray(out.log) ? out.log : [])].slice(0, 30); return; }
+    const table = v && typeof v === 'object' && !Array.isArray(v) && out[k] && typeof out[k] === 'object' && !Array.isArray(out[k]);
+    if (!table) { if (out[k] === undefined || preferTheirs) out[k] = clone(v); return; }
+    Object.entries(v).forEach(([id, f]) => {
+      const mineF = out[k][id];
+      if (mineF === undefined) out[k][id] = clone(f);
+      else if (f === null || mineF === null || typeof f !== 'object' || typeof mineF !== 'object' || Array.isArray(f) || Array.isArray(mineF)) { if (preferTheirs) out[k][id] = clone(f); }
+      else out[k][id] = preferTheirs ? Object.assign(clone(mineF), clone(f)) : Object.assign(clone(f), clone(mineF));
+    });
+  });
+  return out;
+}
+async function importChanges() {
+  if (!G || !mk.ready) return toast('Open your game first, then bring changes into it.');
+  const f = await pickLocalFile('.html,.htm,text/html');
+  if (!f) return;
+  const text = (await f.text()).replace(/\r\n/g, '\n');
+  if (!text.includes('const MAPS = {')) return toast(`“${f.name}” doesn’t look like a TEXAMO index.html.`);
+  let theirs = {};
+  const a = text.indexOf('/*MAKER*/'), b = text.indexOf('/*/MAKER*/');
+  if (a >= 0 && b > a) { try { theirs = JSON.parse(text.slice(a + 9, b).trim() || '{}') || {}; } catch (e) { return toast('Couldn’t read the Game Maker changes in that file.'); } }
+  toast('Reading the other file… (a few seconds)', 6000);
+  const tmp = document.createElement('iframe');
+  tmp.style.cssText = 'position:absolute;left:-9999px;width:800px;height:600px;border:0';
+  tmp.srcdoc = typeof safePage === 'function' ? safePage(text) : text.replace(/<script type="module"[\s\S]*?<\/script>/, '<script>window.FB = null;<\/script>');
+  document.body.appendChild(tmp);
+  await new Promise(r => { tmp.onload = r; });
+  await wait(300);
+  const theirMaps = {};
+  let theirTiles = {};
+  try {
+    const r = tmp.contentWindow.eval('({ MAPS, TILES })');
+    Object.entries(r.MAPS).forEach(([id, mp]) => { if (mp && Array.isArray(mp.rows)) theirMaps[id] = { name: mp.name || id, room: Boolean(mp.room), dark: Boolean(mp.dark), grid: mp.rows.map(row => String(row).trim().split(/\s+/)) }; });
+    theirTiles = JSON.parse(JSON.stringify(r.TILES));
+  } catch (e) {}
+  tmp.remove();
+  const changedMaps = Object.keys(theirMaps).filter(id => !ed.maps[id] || JSON.stringify(ed.maps[id].grid) !== JSON.stringify(theirMaps[id].grid));
+  const names = { enemies: 'Enemies', items: 'Items', npcs: 'People', shops: 'Shops', tiles: 'Squares', sprites: 'Pictures', music: 'Songs', maps: 'Map settings', balance: 'Balance', palette: 'Colors', forms: 'Dragon forms', scenes: 'Scenes', recipes: 'Crafting', battleBgs: 'Fight backgrounds', statuses: 'Statuses', story: 'The story' };
+  const counts = Object.entries(theirs).filter(([k, v]) => k !== 'log' && v && (Array.isArray(v) ? v.length : Object.keys(v).length)).map(([k, v]) => `${names[k] || k}: ${Array.isArray(v) ? v.length + ' steps' : Object.keys(v).length}`);
+  if (!counts.length && !changedMaps.length) return toast(`“${f.name}” has nothing different from what you have open.`, 7000);
+  const dlg = $('dlg'), form = $('dlgForm');
+  form.innerHTML = `<h2>Bring in changes from ${esc(f.name)}</h2>
+    ${counts.length ? `<label class="ck"><input type="checkbox" name="changes" checked> <b>Game Maker changes</b></label><p class="small muted" style="margin:2px 0 8px 26px">${counts.map(esc).join(' · ')}</p>` : ''}
+    ${changedMaps.length ? `<p><b>Maps painted differently</b> <button type="button" class="btn sm" data-impall="1">all</button> <button type="button" class="btn sm" data-impall="0">none</button></p>
+      <div style="max-height:200px;overflow:auto;columns:2">${changedMaps.map(id => `<label class="ck small" style="display:block"><input type="checkbox" name="map" value="${attr(id)}" checked> ${esc(theirMaps[id].name)}${ed.maps[id] ? '' : ' <span class="muted">(new)</span>'}</label>`).join('')}</div>` : ''}
+    <p><b>When both copies changed the same thing</b></p>
+    <label class="ck"><input type="radio" name="prefer" value="theirs" checked> use the other file’s</label>
+    <label class="ck"><input type="radio" name="prefer" value="mine"> keep mine</label>
+    <p class="small muted">Nothing is saved until you press Save or Publish, so you can look around first.</p>
+    <div class="row"><button class="btn go" value="ok">Bring them in</button><button class="btn" value="cancel" formnovalidate>Cancel</button></div>`;
+  form.onclick = ev => { const x = ev.target.closest('[data-impall]'); if (x) { ev.preventDefault(); form.querySelectorAll('input[name="map"]').forEach(c => { c.checked = x.dataset.impall === '1'; }); } };
+  dlg.onclose = async () => {
+    form.onclick = null;
+    if (dlg.returnValue !== 'ok') return;
+    const preferTheirs = (form.querySelector('input[name="prefer"]:checked') || {}).value !== 'mine';
+    const takeChanges = Boolean(form.querySelector('input[name="changes"]:checked'));
+    const pick = [...form.querySelectorAll('input[name="map"]:checked')].map(c => c.value);
+    let src = buildFile().src;   // your file, with everything you've changed so far
+    const merged = takeChanges ? mergeChanges(makerChanges() || {}, theirs, preferTheirs) : (makerChanges() || {});
+    const missing = [], allMine = tiles(), extra = [], painted = SRC.includes('PAINTED ROOMS');
+    pick.forEach(id => {
+      const mp = theirMaps[id];
+      if (ed.maps[id]) { const out = replaceRows(src, id, rowsOf(mp.grid)); if (out) src = out; else if (painted) (merged.mapRows = merged.mapRows || {})[id] = rowsOf(mp.grid); else return missing.push(mp.name); }   // [ADDED] PAINTED ROOMS
+      else src = src.replace('const MAPS = {\n', 'const MAPS = {\n' + newMapCode(id, mp));
+      mp.grid.forEach(row => row.forEach(c => { const k = String(c).split('~')[0]; if (k !== '@' && !allMine[k] && theirTiles[k] && !extra.includes(k) && !(theirs.tiles && theirs.tiles[k])) extra.push(k); }));
+    });
+    if (extra.length) src = src.replace('const TILES = {\n', 'const TILES = {\n' + extra.map(c => tileLine(c, theirTiles[c])).join('\n') + '\n');
+    const a2 = src.indexOf('/*MAKER*/'), b2 = src.indexOf('/*/MAKER*/');
+    if (a2 >= 0 && b2 > a2) src = src.slice(0, a2 + 9) + JSON.stringify(merged, null, 2).replace(/</g, '\\u003c') + src.slice(b2);
+    const keep = { name: FILE_NAME, handle: FILE_HANDLE };
+    await openGame(src, keep.name, keep.handle);
+    mk.imported = true;
+    markUnsaved();
+    toast(`Brought in ${[takeChanges && counts.length ? 'the Game Maker changes' : '', pick.length - missing.length ? `${pick.length - missing.length} map${pick.length - missing.length === 1 ? '' : 's'}` : ''].filter(Boolean).join(' and ') || 'nothing'}. Look around, then Save or Publish.${missing.length ? ` These maps are made by the game’s code, so they couldn’t be copied: ${missing.join(', ')}.` : ''}`, 12000);
+  };
+  dlg.showModal();
+}
+document.addEventListener('click', ev => { if (ev.target.closest && ev.target.closest('#importBtn')) importChanges(); });
 
 /* ---------------------------------------------------------------- SAVING */
 function diffTable(base, cur) {
@@ -2938,6 +3440,8 @@ function makerChanges() {
   });
   if (Object.keys(mk.sprites).length) all.sprites = Object.assign(all.sprites || {}, clone(mk.sprites));
   if (Object.keys(mk.newColors || {}).length) all.palette = Object.assign(all.palette || {}, clone(mk.newColors));   // [ADDED] ANY COLOR
+  if (mk.mapRows && Object.keys(mk.mapRows).length) all.mapRows = Object.assign(all.mapRows || {}, clone(mk.mapRows));   // [ADDED] PAINTED ROOMS
+  if (mk.storyChanged && Array.isArray(mk.cur.story)) { all.story = clone(mk.cur.story.filter(st => st && st.flag)); all.storyEnd = mk.cur.storyEnd || ''; }   // [ADDED] THE STORY AS A LIST
   // [ADDED] A FORM'S MAIN MOVES ARE IN ITS LIST: a form whose Map moves you saved has its main moves in that list already,
   // so the game mustn't put them in again (mainsListed). Only with the list: a form whose list isn't saved here gets
   // them from the game, as before.
@@ -2948,11 +3452,11 @@ function makerChanges() {
 }
 function changeCount() {
   if (!mk.ready) return 0;
-  let n = Object.keys(mk.sprites).length + Object.keys(mk.newColors || {}).length;   // [ADDED] newColors
+  let n = Object.keys(mk.sprites).length + Object.keys(mk.newColors || {}).length + (mk.storyChanged ? 1 : 0);   // [ADDED] newColors. [ADDED] storyChanged
   MAKER_TABLES.forEach(t => { n += Object.keys(diffTable(mk.base[t], mk.cur[t])).length; });
   return n;
 }
-function makerDirty() { return mk.ready && changeCount() > 0; }
+function makerDirty() { return mk.ready && (changeCount() > 0 || Boolean(mk.imported)); }   // [ADDED] imported: BRING IN CHANGES (they're in the file now, but not saved yet)
 // Put your changes into the game file (between /*MAKER*/ and /*/MAKER*/).
 function makerApply(src) {
   if (!mk.ready) return src;
@@ -3074,6 +3578,27 @@ function renderBalanceTab() {
         <div class="card"><h4>Magic</h4><div class="fgrid">
           ${F.fld('Spell strength (%)', F.num('magicPower', { min: 0, step: 5 }), '100: normal. 60: damage spells hit 40% softer. (Mana shields still block on top of this.)')}
         </div><p class="small muted">Enemies can also resist magic on their own: Enemies tab → <b>Resists magic</b>. Good for the ones without a mana shield.</p></div>
+        <div class="card"><h4>Pictures</h4><div class="fgrid">
+          ${F.fld('Ground behind pictures', F.check('noAutoGround', 'Don’t guess it from the squares around'), 'on: each spot shows the ground you gave it (or the map’s floor). Turn it on with Stop guessing grounds… on the Maps tab, so every spot keeps the ground it has now')}
+          ${F.fld('Gaps', F.check('squareGaps', 'Thin gaps between the squares (the old look)'), 'off: the map is one smooth picture, with no checkerboard')}
+          ${F.fld('Outline', F.check('noOutline', 'No automatic outline'), 'the game draws a thin dark line around every picture. Tick this to turn it off and draw your own outlines where you want them (publish, then reload to see it)')}
+        </div></div>
+        <div class="card"><h4>Day and night <span class="hint">Outside, the time of day follows a clock everyone online shares. The Capital's streets are always night. Each map can pick its own sky (Maps → This map → Sky).</span></h4><div class="fgrid">
+          ${F.fld('A whole day takes', F.num('dayMinutes', { min: 0, step: 1 }), 'real minutes (40: about 13 minutes of night). 0: always day')}
+          ${F.fld('How dark the night gets', F.num('nightDark', { min: 0, max: 95, step: 5 }), '% (0: not at all, 80: very dark)')}
+          ${F.fld('Your own light', F.num('lightRadius', { min: 0.5, max: 8, step: 0.5 }), 'how far it reaches at night, in squares')}
+        </div><p class="small muted">Lights at night: shops, doors and stairs, and squares whose picture is a lamp, lantern, torch, fire, sign, screen or neon. Give any square its own glow with <b>light</b> (a color like <code>#ff4fd8</code>) in its settings.</p></div>
+        <div class="card"><h4>Hover-cars <span class="hint">On the Capital's highway lanes.</span></h4><div class="fgrid">
+          ${F.fld('Slowest car', F.num('carSpeedMin', { min: 0.5, step: 0.5 }), 'squares per second')}
+          ${F.fld('Fastest car', F.num('carSpeedMax', { min: 0.5, step: 0.5 }), 'each car picks a speed in between')}
+          ${F.fld('A new car every', F.num('carGapMin', { min: 0.5, step: 0.5 }), 'seconds, at the soonest (on each lane)')}
+          ${F.fld('…or at the latest', F.num('carGapMax', { min: 0.5, step: 0.5 }), 'seconds')}
+          ${F.fld('Most cars on one lane', F.num('carsPerLane', { min: 0 }), '0: no new cars')}
+          ${F.fld('Damage', F.num('carDamage', { min: 0 }), '% of your max HP (a car never kills you). 0: no damage')}
+          ${F.fld('Cars', F.check('noCars', 'No hover-cars at all'))}
+        </div>
+        <p class="small muted">Their pictures (one for going sideways, one for going up and down, in each color):</p>
+        <div class="pills">${['r', 'n', 'y', 'm', 'w', 'z'].flatMap(c => ['carSide_' + c, 'carTop_' + c]).map(n => `<span class="pill">${spriteImg(n, 32)} <button type="button" class="btn sm" data-carpic="${n}">Draw / edit</button></span>`).join('')}</div></div>
         <div class="card"><h4>The fall of the Empire</h4><div class="fgrid">
           ${F.fld('Healing while walking', F.num('regenAmount', { min: 0 }), 'HP every few steps (0: none; potions, inns and healing spells instead)')}
           ${F.fld('…every this many steps', F.num('regenSteps', { min: 1 }))}
@@ -3949,7 +4474,7 @@ function when(t) {
   const d = new Date(t), today = new Date();
   return d.toDateString() === today.toDateString() ? `today at ${clock(t)}` : `${d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })} at ${clock(t)}`;
 }
-function changesNow() { return G ? Object.keys(ed.changed).length + Object.keys(ed.newTiles).length + changeCount() : 0; }
+function changesNow() { return G ? Object.keys(ed.changed).length + Object.keys(ed.newTiles).length + changeCount() + (mk.imported ? 1 : 0) : 0; }   // [ADDED] mk.imported
 function userName(u) { return (u && (u.displayName || String(u.email || '').split('@')[0].replace(/\./g, ' '))) || 'you'; }
 function withTimeout(p, ms) { return Promise.race([p, new Promise((_, no) => setTimeout(() => no(Object.assign(new Error('timeout'), { code: 'timeout' })), ms))]); }
 async function dbGet(path) { const { D, db } = online.fb; return (await withTimeout(D.get(D.ref(db, path)), 15000)).val(); }
@@ -4532,24 +5057,260 @@ function musicForm(id) {
   const own = x.drums === undefined || presets.includes(x.drums) ? 'k.s.k.s.' : x.drums;
   return `${head}<div class="card"><h4>The song</h4><div class="fgrid">${common}
       ${F.fld('Speed', F.num('bpm', { min: 30, max: 300, ph: '110' }), 'beats a minute: 70 is slow, 110 is walking, 160 is a fight')}
-      ${F.fld('Time', F.select('steps', [[8, '4/4 (most songs)'], [6, '3/4 (a waltz)']], { none: false, kind: 'num' }))}</div>
-    ${F.fld('Chords', F.area('chords', { rows: 4, ph: 'C | G | Am | F' }), 'One bar per <code>|</code>. Two chords in one bar share it: <code>F G</code>. <code>C</code> is major, <code>Am</code> is minor; also <code>7</code>, <code>m7</code>, <code>maj7</code>, <code>dim</code>, <code>sus4</code>, <code>5</code>, and <code>C/E</code> for E in the bass. <code>-</code> keeps a chord going.', true)}
-    ${F.fld('The tune', F.area('melody', { rows: 7, ph: 'E5 - G5 - C6 - - - | D6 - B5 - G5 - - -' }), 'One bar per <code>|</code>. A note is a letter and an octave: <code>C5</code>, <code>F#4</code>, <code>Bb5</code>. <code>-</code> holds the note before it, <code>.</code> is a rest. 8 in a bar are eighth notes, 4 are quarter notes, 2 are halves, 1 fills the bar.', true)}
-    <div class="fgrid">
-      ${F.fld('Tune sound', F.select('lead', SONG_SOUNDS, { none: false }))}
-      ${F.fld('Chords play as', F.select('harmony', SONG_HARMONY, { none: false }))}
+      ${F.fld('Time', F.select('steps', [[8, '4/4 (most songs)'], [6, '3/4 (a waltz)']], { none: false, kind: 'num' }))}</div></div>
+    ${rollCard(x)}
+    ${drumCard(x, presets, own)}
+    <div class="card"><h4>Sounds <span class="hint">How each part sounds. Press ▶ Play to hear the whole song.</span></h4><div class="fgrid">
+      ${F.fld('Tune sound', F.select('lead', SONG_SOUNDS, { none: false }), 'the main tune (the Tune track above)')}
+      ${F.fld('Chords play as', F.select('harmony', SONG_HARMONY, { none: false }), 'how the chords on top of the notes are played')}
       ${F.fld('Chord sound', F.select('chordSound', SONG_SOUNDS, { none: 'automatic' }))}
-      ${F.fld('Bass', F.select('bass', SONG_BASS, { none: false }))}
+      ${F.fld('Bass', F.select('bass', SONG_BASS, { none: false }), 'an automatic bass from the chords. Want your own bass line? Pick No bass and add a track with low notes')}
       ${F.fld('Bass sound', F.select('bassSound', SONG_SOUNDS, { none: 'triangle (normal)' }))}
-      ${F.fld('Drums', F.select('drums', [...SONG_DRUMS, [own, 'My own beat…']], { none: false }))}
-      ${x.drums !== undefined && !presets.includes(x.drums) ? F.fld('My beat', F.text('drums', { ph: 'k.s.k.s.' }), 'one letter a step (8 a bar): <code>k</code> kick, <code>s</code> snare, <code>h</code> hi-hat, <code>x</code> kick and hat, <code>o</code> snare and hat, <code>.</code> nothing. Different bars: split them with <code>|</code>.') : ''}
     </div></div>
-    <div class="card"><h4>Writing a tune</h4><ul class="small">
-      <li><code>C5 D5 E5 F5</code>: four quarter notes. <code>C5 - - - G5 - - -</code>: two long ones. <code>C5 . C5 . G5 - - -</code>: short, short, long.</li>
-      <li><code>C4</code> is middle C, <code>C5</code> is the C above it. Most tunes sound good between <code>C5</code> and <code>C6</code>.</li>
-      <li>On the beat, use the notes of the chord under it (C chord: C, E, G) and it’ll sound right. Notes between them are fine on the off-beats.</li>
-      <li>Easiest start: <b>Copy this one</b> on a song you like, then change its notes and press <b>Play</b> again.</li></ul></div>`;
+    <details class="card"><summary><b>Edit as text</b> <span class="muted small">(the same song written out: the editor above writes this for you)</span></summary>
+      ${F.fld('Chords', F.area('chords', { rows: 3, ph: 'C | G | Am | F' }), 'one bar per <code>|</code>')}
+      ${F.fld('The tune', F.area('melody', { rows: 4, ph: 'E5 - G5 - C6 - - - | D6 - B5 - G5 - - -' }), 'a note is a letter and an octave (<code>C5</code>, <code>F#4</code>), <code>-</code> holds it, <code>.</code> is quiet')}
+      ${x.drums !== undefined && !presets.includes(x.drums) ? F.fld('My beat', F.text('drums', { ph: 'k.s.k.s.' }), '<code>k</code> kick, <code>s</code> snare, <code>h</code> hi-hat, <code>x</code> kick and hat, <code>o</code> snare and hat, <code>.</code> nothing') : ''}
+    </details>`;
 }
+
+/* ---------------------------------------------------------------- [ADDED] THE MUSIC EDITOR
+   Luna, Nov 23: the music "looks more like a text box: do an actual music engine". Songs are drawn on a grid now:
+   - Notes: a piano roll. Each row is a note (low at the bottom), each column a step (8 to a bar in 4/4). Click to put a note
+     (as long as the Note length you picked), click it again to take it away. Rows lit up in a bar are the notes of its chord:
+     those always sound right on the beat.
+   - Tracks: the Tune, plus as many more as you like (a bass line, a second voice), each with its own sound and volume.
+     The other tracks show faintly behind the one you're writing.
+   - Chords: one or two a bar, picked from a list, right above the bars they play under.
+   - Drums: kick, snare and hi-hat, one bar that repeats.
+   It all writes the same song text the game always read (Edit as text), plus tracks: [...] for the extra tracks. */
+const ROLL = { lo: 36, hi: 96, rowH: 13, colW: 22, keyW: 46 };   // C2 to C7
+const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const CHORD_KINDS = [['', ''], ['m', 'm'], ['7', '7'], ['m7', 'm7'], ['maj7', 'maj7'], ['sus4', 'sus4'], ['dim', 'dim']];
+function midiName(n) { return NOTE_NAMES[((n % 12) + 12) % 12] + (Math.floor(n / 12) - 1); }
+function nameMidi(t) {
+  const r = /^([A-Ga-g])([#b]?)(\d)$/.exec(String(t || '').trim());
+  if (!r) return null;
+  return 12 * (Number(r[3]) + 1) + { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[r[1].toUpperCase()] + (r[2] === '#' ? 1 : r[2] === 'b' ? -1 : 0);
+}
+function barsOf(text) { return String(text || '').split('|').map(b => b.trim().split(/\s+/).filter(Boolean)).filter(b => b.length); }
+function songSteps(x) { return Math.max(2, Math.min(32, Math.round(Number(x.steps) || 8))); }
+function songBarCount(x) { return Math.max(1, barsOf(x.chords).length, barsOf(x.melody).length, ...(x.tracks || []).map(t => barsOf(t && t.notes).length)); }
+// notes text → one cell a step: { m } where a note starts, 'h' while it's held, null when quiet (a shorter tune repeats, like in the game)
+function notesGrid(text, steps, bars) {
+  const src = barsOf(text), cells = [];
+  let sounding = false;
+  for (let b = 0; b < bars; b++) {
+    const bar = src.length ? src[b % src.length] : [], row = Array(steps).fill(null);
+    bar.forEach((tok, i) => {
+      const s = Math.round(i * steps / bar.length), e = Math.round((i + 1) * steps / bar.length);
+      if (tok === '-' || tok === '_') { for (let k = s; k < e; k++) row[k] = sounding ? 'h' : null; return; }
+      const n = nameMidi(tok);
+      sounding = n !== null;
+      for (let k = s; k < e; k++) row[k] = !sounding ? null : k === s ? { m: n } : 'h';
+    });
+    cells.push(...row);
+  }
+  return cells;
+}
+function gridNotes(cells, steps) {
+  const out = [];
+  for (let b = 0; b * steps < cells.length; b++) out.push(cells.slice(b * steps, (b + 1) * steps).map(c => c === 'h' ? '-' : c && c.m !== undefined ? midiName(c.m) : '.').join(' '));
+  return out.join(' | ');
+}
+function chordTones(name) {   // 'Am' → [9, 0, 4] (which notes of the octave)
+  const r = /^([A-G])([#b]?)(maj7|m7|m|dim|aug|sus2|sus4|7|6|5)?/.exec(String(name || ''));
+  if (!r) return [];
+  const root = ({ C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[r[1]] + (r[2] === '#' ? 1 : r[2] === 'b' ? -1 : 0) + 12) % 12;
+  const shape = { '': [0, 4, 7], m: [0, 3, 7], dim: [0, 3, 6], aug: [0, 4, 8], 7: [0, 4, 7, 10], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11], 6: [0, 4, 7, 9], sus2: [0, 2, 7], sus4: [0, 5, 7], 5: [0, 7] }[r[3] || ''] || [0, 4, 7];
+  return shape.map(i => (root + i) % 12);
+}
+function rollTrackText(x, t) { return t < 0 ? x.melody : ((x.tracks || [])[t] || {}).notes; }
+function rollSetText(x, t, text) { if (t < 0) x.melody = text; else x.tracks[t].notes = text; }
+function rollTrackSound(x, t) { return t < 0 ? x.lead || 'pulse' : ((x.tracks || [])[t] || {}).sound || 'square'; }
+function rollCard(x) {
+  if (mk.rollSong !== mk.sel.music) { mk.rollSong = mk.sel.music; mk.rollTrack = -1; mk.rollScrolled = false; }
+  const t = (x.tracks || [])[mk.rollTrack] ? mk.rollTrack : -1;
+  mk.rollTrack = t;
+  const steps = songSteps(x), bars = songBarCount(x), len = mk.rollLen || 2;
+  const lens = steps === 6 ? [[1, '♪ 1/8'], [2, '♩ 1/4'], [3, '♩. 3/8'], [6, 'whole bar']] : [[1, '♪ 1/8'], [2, '♩ 1/4'], [4, '𝅗𝅥 1/2'], [8, 'whole bar']];
+  const tr = (x.tracks || [])[t];
+  return `<div class="card"><h4>Notes <span class="hint">Click the grid to put a note, click it again to take it away. Lit-up rows are the notes of that bar’s chord: they always fit.</span></h4>
+    <div class="row rolltracks">
+      <button type="button" class="btn sm" data-roll="track" data-t="-1" aria-pressed="${t < 0}">Tune</button>
+      ${(x.tracks || []).map((k, i) => `<button type="button" class="btn sm" data-roll="track" data-t="${i}" aria-pressed="${t === i}">${esc((k && k.name) || 'Track ' + (i + 2))}</button>`).join('')}
+      <button type="button" class="btn sm" data-roll="addTrack" title="Another line of notes with its own sound: a bass line, a second voice...">+ Add a track</button>
+    </div>
+    ${tr ? `<div class="fgrid" style="margin:6px 0">${F.fld('Track name', F.text(`tracks.${t}.name`))}${F.fld('Its sound', F.select(`tracks.${t}.sound`, SONG_SOUNDS, { none: false }))}${F.fld('Volume', F.num(`tracks.${t}.volume`, { min: 0, max: 2, step: 0.1, ph: '1' }))}<div class="fld"><span class="lbl">&nbsp;</span><button type="button" class="btn sm" data-roll="delTrack">Remove this track</button></div></div>` : ''}
+    <div class="row rolltools">
+      <span class="small">Note length</span>${lens.map(([v, l]) => `<button type="button" class="btn sm" data-roll="len" data-v="${v}" aria-pressed="${len === v}">${l}</button>`).join('')}
+      <span class="sep"></span>
+      <span class="small">${bars} bar${bars === 1 ? '' : 's'}</span><button type="button" class="btn sm" data-roll="addBar" title="Add a bar at the end">+ Bar</button><button type="button" class="btn sm" data-roll="delBar"${bars > 1 ? '' : ' disabled'} title="Take the last bar away">− Bar</button>
+      <span class="sep"></span>
+      <button type="button" class="btn sm primary" data-mk="musicPlay">▶ Play</button><button type="button" class="btn sm" data-mk="musicStop">■ Stop</button>
+    </div>
+    <div class="rollbox" id="rollBox">
+      <div class="rollchords" style="width:${ROLL.keyW + bars * steps * ROLL.colW}px"><span class="rollcorner">Chords</span>${chordStrip(x, steps, bars)}</div>
+      <div class="rollrow"><canvas id="rollKeys" class="rollkeys"></canvas><div class="rollgridwrap"><canvas id="rollGrid"></canvas><div class="rollhead" id="rollHead" hidden></div></div></div>
+    </div></div>`;
+}
+function chordOptions(cur) {
+  const roots = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
+  const known = roots.flatMap(r => CHORD_KINDS.map(([k]) => r + k));
+  return `<option value="">—</option><option value="-"${cur === '-' ? ' selected' : ''}>(keep the last one)</option>`
+    + (cur && cur !== '-' && !known.includes(cur) ? `<option selected>${esc(cur)}</option>` : '')
+    + roots.map(r => `<optgroup label="${r}">${CHORD_KINDS.map(([k, l]) => `<option${cur === r + k ? ' selected' : ''}>${r}${l}</option>`).join('')}</optgroup>`).join('');
+}
+function chordStrip(x, steps, bars) {
+  const src = barsOf(x.chords);
+  let html = '';
+  for (let b = 0; b < bars; b++) {
+    const bar = src.length ? src[b % src.length] : [];
+    html += `<span class="rollbar" style="width:${steps * ROLL.colW}px"><select data-rollchord="${b}" data-half="0" title="Bar ${b + 1}: its chord">${chordOptions(bar[0] || '')}</select><select data-rollchord="${b}" data-half="1" title="Bar ${b + 1}: a second chord for its second half (or —)">${chordOptions(bar[1] || '')}</select></span>`;
+  }
+  return html;
+}
+function drawRoll() {
+  const x = selObj(), grid = $('rollGrid'), keys = $('rollKeys');
+  if (!x || !grid || !keys) return;
+  const steps = songSteps(x), bars = songBarCount(x), total = steps * bars, rows = ROLL.hi - ROLL.lo + 1, { rowH, colW, keyW } = ROLL;
+  grid.width = total * colW; grid.height = rows * rowH; keys.width = keyW; keys.height = rows * rowH;
+  const g = grid.getContext('2d'), k = keys.getContext('2d'), black = n => [1, 3, 6, 8, 10].includes(n % 12);
+  const chords = barsOf(x.chords), tones = [];
+  for (let b = 0; b < bars; b++) { const bar = chords.length ? chords[b % chords.length] : []; tones.push((bar[0] && bar[0] !== '-' ? chordTones(bar[0]) : tones[b - 1]) || []); }
+  for (let r = 0; r < rows; r++) {
+    const n = ROLL.hi - r, y = r * rowH;
+    k.fillStyle = black(n) ? '#1a1d33' : '#e9e4d4'; k.fillRect(0, y, keyW, rowH);
+    k.fillStyle = black(n) ? '#9aa3c0' : '#2a2d40'; k.font = '10px monospace'; k.textBaseline = 'middle';
+    if (n % 12 === 0 || !black(n)) k.fillText(midiName(n), 4, y + rowH / 2 + 1);
+    if (n % 12 === 0) { k.fillStyle = '#f2c94c'; k.fillRect(0, y + rowH - 2, keyW, 2); }
+    for (let b = 0; b < bars; b++) {
+      g.fillStyle = tones[b].includes(n % 12) ? (black(n) ? '#2c3a5e' : '#34497a') : black(n) ? '#141832' : '#1c2142';
+      g.fillRect(b * steps * colW, y, steps * colW, rowH);
+    }
+  }
+  g.lineWidth = 1;
+  for (let c = 0; c <= total; c++) {
+    g.strokeStyle = c % steps === 0 ? 'rgba(242,201,76,.55)' : c % 2 === 0 ? 'rgba(255,255,255,.14)' : 'rgba(255,255,255,.05)';
+    g.beginPath(); g.moveTo(c * colW + .5, 0); g.lineTo(c * colW + .5, rows * rowH); g.stroke();
+  }
+  for (let r = 0; r <= rows; r++) { const n = ROLL.hi - r + 1; g.strokeStyle = n % 12 === 0 ? 'rgba(242,201,76,.3)' : 'rgba(0,0,0,.25)'; g.beginPath(); g.moveTo(0, r * rowH + .5); g.lineTo(total * colW, r * rowH + .5); g.stroke(); }
+  const drawNotes = (cells, fill, edge) => cells.forEach((c, i) => {
+    if (!c || c === 'h' || c.m < ROLL.lo || c.m > ROLL.hi) return;
+    let n = 1; while (cells[i + n] === 'h') n++;
+    const y = (ROLL.hi - c.m) * rowH;
+    g.fillStyle = fill; g.fillRect(i * colW + 1, y + 1, n * colW - 2, rowH - 2);
+    if (edge) { g.strokeStyle = edge; g.strokeRect(i * colW + 1.5, y + 1.5, n * colW - 3, rowH - 3); g.fillStyle = '#14162a'; g.font = '9px monospace'; g.textBaseline = 'middle'; if (n * colW > 26) g.fillText(midiName(c.m), i * colW + 4, y + rowH / 2 + 1); }
+  });
+  [-1, ...(x.tracks || []).map((_, i) => i)].filter(t => t !== mk.rollTrack).forEach(t => drawNotes(notesGrid(rollTrackText(x, t), steps, bars), 'rgba(160,170,220,.28)'));
+  drawNotes(notesGrid(rollTrackText(x, mk.rollTrack), steps, bars), mk.rollTrack < 0 ? '#f2c94c' : '#7fe0f0', '#fff6c8');
+  if (!mk.rollScrolled) {   // start looking at the notes (or around C5)
+    const cells = notesGrid(rollTrackText(x, mk.rollTrack), steps, bars).filter(c => c && c.m !== undefined);
+    const mid = cells.length ? cells.reduce((s, c) => s + c.m, 0) / cells.length : 72;
+    const box = $('rollBox'); if (box) box.scrollTop = Math.max(0, (ROLL.hi - mid) * rowH - box.clientHeight / 2);
+    mk.rollScrolled = true;
+  }
+}
+function playNote(n, wave) {
+  try { const w = frame.contentWindow, out = w.musicOut(); if (out) w.songVoice(out.context, out, 'lead', wave, n, out.context.currentTime + 0.01, 0.22); } catch (e) {}
+}
+function rollChanged(x) { markUnsaved(); drawRoll(); const ta = document.querySelector('#tab-music [data-p="melody"]'); if (ta) ta.value = x.melody || ''; const tc = document.querySelector('#tab-music [data-p="chords"]'); if (tc) tc.value = x.chords || ''; }
+document.addEventListener('click', ev => {
+  if (!ev.target.closest || mk.tab !== 'music') return;
+  const grid = ev.target.closest('#rollGrid');
+  const x = selObj();
+  if (grid && x) {
+    const r = grid.getBoundingClientRect(), steps = songSteps(x), bars = songBarCount(x);
+    const step = Math.floor((ev.clientX - r.left) / ROLL.colW), n = ROLL.hi - Math.floor((ev.clientY - r.top) / ROLL.rowH);
+    const cells = notesGrid(rollTrackText(x, mk.rollTrack), steps, bars);
+    if (step < 0 || step >= cells.length || n < ROLL.lo || n > ROLL.hi) return;
+    let s = step; while (s > 0 && cells[s] === 'h') s--;
+    if (cells[s] && cells[s].m === n) {   // clicked a note: take it away
+      cells[s] = null; for (let i = s + 1; cells[i] === 'h'; i++) cells[i] = null;
+    } else {   // put a note (one note at a time on a track: it replaces what was there)
+      const len = Math.min(mk.rollLen || 2, cells.length - step);
+      for (let i = step; i < step + len; i++) cells[i] = i === step ? { m: n } : 'h';
+      for (let i = step + len; cells[i] === 'h'; i++) cells[i] = null;
+      playNote(n, rollTrackSound(x, mk.rollTrack));
+    }
+    rollSetText(x, mk.rollTrack, gridNotes(cells, steps));
+    return rollChanged(x);
+  }
+  const b = ev.target.closest('[data-roll]');
+  if (b && x) {
+    ev.preventDefault();
+    const act = b.dataset.roll, steps = songSteps(x), bars = songBarCount(x);
+    if (act === 'track') { mk.rollTrack = Number(b.dataset.t); mk.rollScrolled = false; }
+    else if (act === 'len') mk.rollLen = Number(b.dataset.v);
+    else if (act === 'addTrack') { (x.tracks = x.tracks || []).push({ name: `Track ${x.tracks.length + 2}`, sound: 'square', notes: gridNotes(Array(steps * bars).fill(null), steps), volume: 1 }); mk.rollTrack = x.tracks.length - 1; mk.rollScrolled = false; markUnsaved(); }
+    else if (act === 'delTrack') { if (!confirm('Remove this track and its notes?')) return; x.tracks.splice(mk.rollTrack, 1); if (!x.tracks.length) delete x.tracks; mk.rollTrack = -1; markUnsaved(); }
+    else if (act === 'addBar' || act === 'delBar') {
+      const nb = act === 'addBar' ? bars + 1 : Math.max(1, bars - 1), fit = text => gridNotes(notesGrid(text, steps, bars).concat(Array(steps).fill(null)).slice(0, nb * steps), steps);
+      const ch = barsOf(x.chords); while (ch.length < bars) ch.push(ch.length ? ch[ch.length % Math.max(1, barsOf(x.chords).length)] : ['C']);
+      x.chords = (act === 'addBar' ? [...ch, ch[ch.length - 1] || ['C']] : ch.slice(0, nb)).map(t => t.join(' ')).join(' | ');
+      x.melody = fit(x.melody); (x.tracks || []).forEach(tr => { tr.notes = fit(tr.notes); });
+      markUnsaved();
+    }
+    return renderMakerTab('music', true);
+  }
+  const d = ev.target.closest('[data-drum]');
+  if (d && x) {
+    ev.preventDefault();
+    const steps = songSteps(x), pat = drumPattern(x, steps), i = Number(d.dataset.st), part = d.dataset.drum;
+    const has = { k: /[kx]/.test(pat[i]), s: /[so]/.test(pat[i]), h: /[hxo]/.test(pat[i]) };
+    has[part] = !has[part];
+    if (part === 'k' && has.k) has.s = false; if (part === 's' && has.s) has.k = false;   // (a kick and a snare can't share a step)
+    pat[i] = has.k ? (has.h ? 'x' : 'k') : has.s ? (has.h ? 'o' : 's') : has.h ? 'h' : '.';
+    x.drums = pat.join('');
+    markUnsaved();
+    return renderMakerTab('music', true);
+  }
+});
+document.addEventListener('change', ev => {
+  const sel = ev.target.closest && ev.target.closest('[data-rollchord]');
+  const x = selObj();
+  if (!sel || !x || mk.tab !== 'music') return;
+  const bars = songBarCount(x), src = barsOf(x.chords), ch = [];
+  for (let b = 0; b < bars; b++) ch.push((src.length ? src[b % src.length] : []).slice(0, 2));
+  const b = Number(sel.dataset.rollchord), half = Number(sel.dataset.half);
+  ch[b][half] = sel.value;
+  if (!ch[b][0]) ch[b][0] = ch[b][1] && half === 1 ? '-' : '';
+  ch[b] = ch[b].filter((c, i) => c || i === 0);
+  x.chords = ch.map(t => t.filter(Boolean).join(' ') || '-').join(' | ');
+  rollChanged(x);
+  try { const tones = chordTones(sel.value); if (tones.length) { const w = frame.contentWindow, out = w.musicOut(); tones.forEach(tn => out && w.songVoice(out.context, out, 'pad', 'triangle', 60 + tn, out.context.currentTime + 0.01, 0.5)); } } catch (e) {}   // hear the chord
+});
+document.addEventListener('input', ev => { if (ev.target.closest && ev.target.closest('#tab-music [data-p="melody"], #tab-music [data-p="chords"]')) setTimeout(drawRoll, 0); });
+// the drums: one bar that repeats
+function drumPattern(x, steps) {
+  let beat = x.drums;
+  if (beat === undefined || beat === '' || SONG_DRUMS.some(d => d[0] === beat)) { try { beat = frame.contentWindow.eval('DRUM_BEATS')[beat === undefined || beat === '' ? 'soft' : beat] || ''; } catch (e) { beat = ''; } }
+  const bar = String(beat).split('|')[0].replace(/\s+/g, '').toLowerCase();
+  return Array.from({ length: steps }, (_, i) => bar.length ? bar[i % bar.length] || '.' : '.');
+}
+function drumCard(x, presets, own) {
+  const steps = songSteps(x), pat = drumPattern(x, steps);
+  const row = (part, label, test) => `<div class="drumrow"><span class="small">${label}</span>${pat.map((c, i) => `<button type="button" class="drumcell${test(c) ? ' on' : ''}${i % 2 === 0 ? ' beat' : ''}" data-drum="${part}" data-st="${i}" title="${label}, step ${i + 1}"></button>`).join('')}</div>`;
+  return `<div class="card"><h4>Drums <span class="hint">One bar that repeats. Pick a ready-made beat, or click the squares to make your own.</span></h4>
+    <div class="fgrid">${F.fld('Beat', F.select('drums', [...SONG_DRUMS, [own, 'My own beat']], { none: false }))}</div>
+    <div class="drumgrid">${row('k', 'Kick', c => /[kx]/.test(c))}${row('s', 'Snare', c => /[so]/.test(c))}${row('h', 'Hi-hat', c => /[hxo]/.test(c))}</div></div>`;
+}
+// the line that shows where the song is while it plays
+function startRollHead() {
+  cancelAnimationFrame(mk.rollRaf);
+  const tick = () => {
+    const head = $('rollHead'), x = selObj();
+    if (!head || !x || mk.playing !== mk.sel.music) { if (head) head.hidden = true; return; }
+    try {
+      const w = frame.contentWindow, pl = w.music.player, p = w.parseSong(pl.song), now = w.eval('audioCtx.currentTime');
+      const at = (pl.step - (pl.next - now) / p.stepDur + p.total) % p.total;
+      head.hidden = false; head.style.transform = `translateX(${at * ROLL.colW}px)`;
+    } catch (e) { head.hidden = true; }
+    mk.rollRaf = requestAnimationFrame(tick);
+  };
+  mk.rollRaf = requestAnimationFrame(tick);
+}
+
 function songUsers(id) {
   const out = [], info = mk.musicInfo || { uses: {}, kinds: {} };
   Object.entries((mk.cur.musicUse && mk.cur.musicUse.use) || {}).forEach(([k, v]) => { if (v === id) out.push((info.uses && info.uses[k]) || (info.kinds && info.kinds[k]) || k); });
@@ -4578,6 +5339,7 @@ async function musicAction(act, b) {
     let len = 0;
     try { len = frame.contentWindow.musicPreview(song); } catch (e) { return toast('Couldn’t play it: ' + e.message); }
     mk.playing = mk.sel.music;
+    startRollHead();   // [ADDED] THE MUSIC EDITOR
     clearTimeout(mk.playTimer);
     if (len && song.once) mk.playTimer = setTimeout(() => { mk.playing = null; refreshSide(); }, len * 1000 + 400);
     return refreshSide();
@@ -4625,6 +5387,29 @@ async function sendToGitHub(file, path) {
   }
 }
 // World → Scenes: what else one line can do
+// [ADDED] VIDEO CUTSCENES (Luna, Nov 23): a full-screen video with sound for big moments: a scene line, an enemy's move, a spell.
+// Type a file (videos/intro.mp4, next to index.html on GitHub) or a YouTube link, or Choose a video… to send one to your GitHub.
+function videoField(path, where, cur) {
+  const src = cur && ((mk.localFiles && mk.localFiles[cur]) || cur);
+  const yt = cur && /youtu\.?be/.test(cur);
+  return `${F.text(path, { w: 230, ph: 'videos/intro.mp4 or a YouTube link' })}<button type="button" class="btn sm" data-pickvideo="${where}" data-path="${attr(path)}">Choose a video…</button>`
+    + (src && !yt && /\.(mp4|webm|mov|ogv)$/i.test(cur) ? `<video class="scenethumb" src="${attr(src)}" muted autoplay loop playsinline title="${attr(cur)}"></video>` : yt ? ' <span class="muted small">(YouTube)</span>' : '');
+}
+document.addEventListener('click', async ev => {
+  const b = ev.target.closest && ev.target.closest('[data-pickvideo]');
+  if (!b || !mk.ready) return;
+  ev.preventDefault();
+  const f = await pickLocalFile('video/mp4,video/webm,.mp4,.webm,.mov');
+  if (!f) return;
+  const path = 'videos/' + fileSlug(f.name);
+  (mk.localFiles = mk.localFiles || {})[path] = URL.createObjectURL(f);
+  const root = b.dataset.pickvideo === 'world' ? mk.cur.world.all : selObj();
+  if (!root) return;
+  setPath(root, b.dataset.path, path);
+  markUnsaved();
+  if (mk.tab === 'world') renderWorldTab(true); else renderMakerTab(mk.tab, true);
+  sendToGitHub(f, path);
+});
 function sceneLineExtras(id, l, i) {
   const p = `scenes.${id}.lines.${i}.`;
   const info = mk.musicInfo || { fx: {}, sfx: [] };
@@ -4633,6 +5418,7 @@ function sceneLineExtras(id, l, i) {
   const thumb = !img ? '' : /\.(mp4|webm|ogv|mov)$/i.test(img) ? `<video class="scenethumb" src="${attr(src)}" muted autoplay loop playsinline></video>`
     : /[./:]/.test(img) ? `<img class="scenethumb" src="${attr(src)}" alt="" onerror="this.replaceWith(document.createTextNode(' (not on your GitHub yet)'))">` : spriteImg(img, 48);
   return `<div class="effect sceneextra"><span>Big picture</span> ${F.text(p + 'image', { w: 190, ph: 'art/light.gif or a picture name' })}<button type="button" class="btn sm" data-mk="worldPickArt" data-path="${p}image">Choose a file…</button>${thumb}</div>
+    <div class="effect sceneextra"><span>Full-screen video</span> ${videoField(p + 'video', 'world', l && l.video)}</div>
     <div class="effect sceneextra"><span>Effect</span> ${F.select(p + 'effect', Object.entries(info.fx || {}), { w: 230 })}
       ${mk.cur.music ? `<span>music from here</span> ${F.select(p + 'music', [['none', 'quiet'], ...songOptions()], { w: 170, none: '(keep it)' })}` : ''}
       <span>sound</span> ${F.select(p + 'sound', (info.sfx || []).map(n => [n, n]), { w: 110 })}</div>`;
@@ -4803,7 +5589,7 @@ function absorbPaint(cur, brush) {
   return brush;                                                  // walls and the like fill their square
 }
 function paintCode(cur) { return ed.absorb ? absorbPaint(cur, ed.tile) : ed.tile; }
-function tilesChanged() { mk.tilesVer = (mk.tilesVer || 0) + 1; ed.colors = {}; ed.linkIdx = null; markUnsaved(); }
+function tilesChanged() { mk.tilesVer = (mk.tilesVer || 0) + 1; ed.colors = {}; ed.lookImgs = {}; ed.linkIdx = null; markUnsaved(); }   // [ADDED] lookImgs
 function squareButtons() {
   if (!mk.ready || !mk.cur || !mk.cur.tiles) return '';
   const [top] = splitSquare(ed.tile);
@@ -4812,8 +5598,52 @@ function squareButtons() {
 }
 let sqCode = null;
 function sqObj() { return sqCode && mk.cur.tiles ? mk.cur.tiles[sqCode] : null; }
+// [ADDED] THE SQUARES TAB (Luna, Nov 23: "select a tile and edit its appearance, and it applies to all tiles of that name, like
+// editing an enemy's sprite"). Every square in a list; click one and change its picture, name, what's behind it, whether you
+// can walk on it... Every copy on every map changes with it. (The same editor as ✎ Change this square on the Maps tab.)
+function squaresGroups() {
+  const all = tiles(), groups = {};
+  Object.keys(all).filter(c => c !== '@' && c.indexOf('~') < 0 && all[c] && !all[c].old).forEach(c => {
+    const t = all[c], g = t.enemy ? 'Enemies' : t.npc ? 'People' : t.shop ? 'Shops' : (t.enter || t.link || t.exit || t.door) ? 'Ways in and out' : t.kind === 'wall' ? 'Raised floors and walls' : t.kind === 'blocked' ? (hasPicture(t) ? 'Things in the way' : 'Walls and water') : hasPicture(t) ? 'Things you walk on' : 'Ground and floors';
+    (groups[g] = groups[g] || []).push(c);
+  });
+  const order = ['Ground and floors', 'Walls and water', 'Things in the way', 'Things you walk on', 'Raised floors and walls', 'Ways in and out', 'Shops', 'People', 'Enemies'];
+  return order.filter(g => groups[g]).map(g => [g, groups[g].sort((a, b) => nameOf(a).localeCompare(nameOf(b)))]);
+}
+function renderSquaresTab() {
+  const box = $('tab-squares');
+  if (!mk.ready) { box.innerHTML = '<p>Open your game first.</p>'; return; }
+  const q = (mk.sqFilter || '').toLowerCase();
+  const list = squaresGroups().map(([g, codes]) => {
+    const hit = codes.filter(c => !q || nameOf(c).toLowerCase().includes(q) || c.toLowerCase().includes(q));
+    return hit.length ? `<h4 class="grp">${esc(g)}</h4>` + hit.map(c => `<button type="button" class="pi${c === sqCode ? ' on' : ''}" data-sqpick="${attr(c)}">${chip(c)}<span>${esc(nameOf(c))}</span><code>${esc(c)}</code></button>`).join('') : '';
+  }).join('');
+  box.innerHTML = `<div class="tabhead"><h2>Squares</h2><p class="muted">Every square in the game. Click one to change its picture, name, what’s behind it, and whether you can walk on it: every copy of it on every map changes too. To change just one spot’s ground: Maps tab, <b>Keep what’s under</b> on, pick a ground, click the thing.</p></div>
+    <div class="mlayout"><div class="mlist"><input type="search" id="sqFilter" placeholder="Search squares" value="${attr(mk.sqFilter || '')}"><div class="palette sqlist">${list || '<p class="muted small">No squares with that name.</p>'}</div></div>
+    <div class="mform" id="sqHome">${sqCode && sqObj() ? '' : '<p class="muted">Pick a square on the left.</p>'}</div></div>`;
+  if (sqCode && sqObj()) { $('sqHome').appendChild($('sqForm')); renderSquareDlg(); }
+}
+document.addEventListener('click', ev => {
+  const b = ev.target.closest && ev.target.closest('[data-sqpick]');
+  if (!b || !mk.ready) return;
+  ev.preventDefault();
+  const [top] = splitSquare(b.dataset.sqpick);
+  if (!mk.cur.tiles[top]) { const t = ed.newTiles[top] || tiles()[top]; if (!t) return; mk.cur.tiles[top] = clone(t); }
+  sqCode = top;
+  const keep = document.querySelector('#tab-squares .sqlist'), y = keep ? keep.scrollTop : 0;
+  renderSquaresTab();
+  const l2 = document.querySelector('#tab-squares .sqlist'); if (l2) l2.scrollTop = y;
+});
+document.addEventListener('input', ev => {
+  if (ev.target.id !== 'sqFilter') return;
+  mk.sqFilter = ev.target.value;
+  const pos = ev.target.selectionStart;
+  renderSquaresTab();
+  const f = $('sqFilter'); f.focus(); f.setSelectionRange(pos, pos);
+});
 function openSquare(code) {
   const [top] = splitSquare(code);
+  if ($('sqForm').parentElement !== $('sqDlg')) $('sqDlg').appendChild($('sqForm'));   // [ADDED] THE SQUARES TAB: the editor goes back into its window
   if (!mk.cur.tiles[top]) {   // one made with + New entrance, door or shop: its changes go with the others
     const t = ed.newTiles[top] || tiles()[top];
     if (!t) return;
@@ -4854,7 +5684,7 @@ function renderSquareDlg() {
       ${!pic && spriteOf(code) ? '<span class="muted small">(its picture is whoever stands on it: change that in Enemies, People or Shops)</span>' : ''}</div>
     <h4>${thing || pic ? 'Behind its picture' : 'Its color'}</h4>
     <div class="sqbg">
-      <label><input type="radio" name="sqbg" value="auto"${mode === 'auto' ? ' checked' : ''}> ${thing || pic ? 'The ground around it on the map (like before)' : 'Its own look (the game’s)'}</label>
+      <label><input type="radio" name="sqbg" value="auto"${mode === 'auto' ? ' checked' : ''}> ${thing || pic ? (noGuessing() ? 'Whatever ground you give each spot (the map’s floor until you do)' : 'The ground around it on the map (guessed)') : 'Its own look (the game’s)'}</label>
       <label><input type="radio" name="sqbg" value="bg"${mode === 'bg' ? ' checked' : ''}> ${thing || pic ? 'Always this ground' : 'The same as'}:
         <select data-sqf="bg">${grounds.map(c => `<option value="${attr(c)}"${t.bg === c ? ' selected' : ''}>${esc(nameOf(c))} (${esc(c)})</option>`).join('')}</select></label>
       <label><input type="radio" name="sqbg" value="color"${mode === 'color' ? ' checked' : ''}> My own color: <input type="color" data-sqf="color" value="${attr(/^#[0-9a-f]{6}$/i.test(t.color || '') ? t.color : '#6aa85c')}"></label>

@@ -646,6 +646,19 @@ body.ingame .stats .bar { width: 100px; height: 10px; }
 .map.mega .tile { border-width: 0; border-style: solid; }   /* (no border color here: roofs and raised floors set their own) */
 .map.mega .tile .sprite { position: relative; z-index: 1; }
 .map-scroll.mapfade .map { animation: megafade .42s ease-out; }
+/* [ADDED] TRANSITIONS */
+.map-scroll.tr-black .map { animation: trBlack .8s ease-out; }
+.map-scroll.tr-zoom .map { animation: trZoom .5s ease-out; }
+.map-scroll.tr-slide-left .map { animation: trSlideL .4s ease-out; }
+.map-scroll.tr-slide-right .map { animation: trSlideR .4s ease-out; }
+.map-scroll.tr-slide-top .map { animation: trSlideT .4s ease-out; }
+.map-scroll.tr-slide-bottom .map { animation: trSlideB .4s ease-out; }
+@keyframes trBlack { from { filter: brightness(0); } 45% { filter: brightness(0); } to { filter: none; } }
+@keyframes trZoom { from { transform: scale(1.3); filter: brightness(.3); } to { transform: none; filter: none; } }
+@keyframes trSlideL { from { transform: translateX(-70%); opacity: .3; } to { transform: none; opacity: 1; } }
+@keyframes trSlideR { from { transform: translateX(70%); opacity: .3; } to { transform: none; opacity: 1; } }
+@keyframes trSlideT { from { transform: translateY(-70%); opacity: .3; } to { transform: none; opacity: 1; } }
+@keyframes trSlideB { from { transform: translateY(70%); opacity: .3; } to { transform: none; opacity: 1; } }
 @keyframes megafade { from { filter: brightness(0); } 60% { filter: brightness(.7); } to { filter: none; } }
 .map.mega .tile.outdim { filter: brightness(.45) saturate(.7); }
 .map.mega .tile.outdim.here { filter: none; }
@@ -885,6 +898,36 @@ body.veiled .tile.here { box-shadow: inset 0 0 14px 4px #9fd0ff, 0 0 16px 6px rg
 /* [ADDED] CRISP BIG PICTURES: a thin edge at screen resolution instead of a blown-up black outline */
 .sprite.crisp { --ol: #14162a; filter: drop-shadow(1px 0 0 var(--ol)) drop-shadow(-1px 0 0 var(--ol)) drop-shadow(0 1px 0 var(--ol)) drop-shadow(0 -1px 0 var(--ol)); }
 #dialog .bstage.solo .foe .portrait .sprite.crisp { filter: drop-shadow(2px 0 0 var(--ol)) drop-shadow(-2px 0 0 var(--ol)) drop-shadow(0 2px 0 var(--ol)) drop-shadow(0 -2px 0 var(--ol)); }
+/* [ADDED] LAG FIX: the map's layer moves on the graphics card when it glides */
+.map-grid { will-change: transform; contain: layout paint; }
+/* [ADDED] DAY AND NIGHT */
+.nightcv { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 60; }
+/* [ADDED] THE CORNER MAP */
+.minimap { position: absolute; top: 6px; right: 6px; z-index: 15; padding: 4px 4px 2px; background: rgba(10, 12, 30, .82); border: 2px solid rgba(194, 204, 216, .55); border-radius: 6px; cursor: pointer; line-height: 0; }
+.minimap canvas { image-rendering: pixelated; max-width: 160px; max-height: 150px; }
+.minimap span { display: block; max-width: 160px; font: 11px/1.3 monospace; color: #dfe6ff; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+.minimap:hover { border-color: var(--gold, #f2c94c); }
+/* [ADDED] LOOKS: the title screen's drifting world */
+.titlebg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.titlebg canvas { display: block; image-rendering: pixelated; opacity: .32; filter: saturate(.85); transform-origin: 0 0; animation: titlePan 150s linear infinite alternate; }
+.titlebg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(10, 12, 34, .35), rgba(10, 12, 34, .92) 75%); }
+@keyframes titlePan { from { transform: scale(1.5) translate(0, 0); } to { transform: scale(1.5) translate(calc(-100% + 66.7vw), calc(-100% + 66.7vh)); } }
+body:not([data-page="menu"]) .titlebg { display: none; }
+@media (prefers-reduced-motion: reduce) { .titlebg canvas { animation: none; } }
+/* [ADDED] WHERE AM I */
+#areaBanner { position: fixed; left: 50%; top: 36%; transform: translateX(-50%); text-align: center; pointer-events: none; z-index: 250; opacity: 0; color: #fff; text-shadow: 0 2px 0 #000, 0 0 14px rgba(0, 0, 0, .9); }
+#areaBanner b { display: block; font-size: 32px; letter-spacing: .04em; }
+#areaBanner small { display: block; font-size: 13px; letter-spacing: .25em; text-transform: uppercase; opacity: .85; margin-bottom: 4px; }
+#areaBanner.show { animation: areaIn 3.4s ease forwards; }
+@keyframes areaIn { 0% { opacity: 0; transform: translate(-50%, 10px); } 14% { opacity: 1; transform: translate(-50%, 0); } 72% { opacity: 1; } 100% { opacity: 0; } }
+/* [ADDED] THE CAPITAL, EASIER TO READ: roofs stand up from the street (a lit top edge, a dark bottom edge) */
+.map.mega .tile.roof { box-shadow: inset 0 3px 0 rgba(255, 255, 255, .13), inset 0 -6px 0 rgba(0, 0, 0, .42); }
+/* [ADDED] VIDEO CUTSCENES */
+.cutvideo { position: fixed; inset: 0; z-index: 300; background: #000; display: grid; place-items: center; }
+.cutvideo video, .cutvideo iframe { width: 100vw; height: 100vh; object-fit: contain; border: 0; background: #000; }
+.cutvideo .cutskip { position: fixed; right: 18px; bottom: 18px; z-index: 301; opacity: .85; }
+/* [ADDED] WINGS: you, up in the air, with your shadow on the ground */
+.sprite.aloft { translate: 0 -7px; filter: drop-shadow(0 8px 1px rgba(0, 0, 0, .35)); }
 /* [ADDED] THE HOTBAR */
 .actionbar { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .actionbar[hidden] { display: none; }
@@ -1849,6 +1892,16 @@ const LEVEL_CAP = DEMO ? DEMO_LEVEL_CAP : 50;   // [ADDED] the demo stops at lev
 // [ADDED] BALANCE: how fast you level up, what a level gives you, and how strong magic is.
 // Change these in the Game Maker (the Balance tab shows what they do), or right here.
 const BALANCE = {
+  squareGaps: 0,     // [ADDED] LOOKS: 1 = thin gaps between the squares on the map (like before). 0 = one smooth picture
+  noAutoGround: 0,   // [ADDED] NO MORE GUESSING: 1 = a picture's ground is never guessed from the squares around it (set it yourself in the Game Maker)
+  dayMinutes: 40,    // [ADDED] DAY AND NIGHT: a whole day takes this many real minutes (everyone online shares the same time). 0: always day
+  nightDark: 62,     // [ADDED] DAY AND NIGHT: how dark the night gets, in % (the Capital is always night)
+  lightRadius: 2.5,  // [ADDED] DAY AND NIGHT: how far your own light reaches at night, in squares
+  carSpeedMin: 5, carSpeedMax: 8.5,   // [ADDED] CARS: hover-car speed, squares per second (each car picks one in between)
+  carGapMin: 7, carGapMax: 15,        // [ADDED] CARS: seconds between new cars on each lane
+  carsPerLane: 2, carDamage: 8,       // [ADDED] CARS: most cars on one lane at once; damage as % of your max HP (0: none)
+  noCars: 0,                          // [ADDED] CARS: 1 = no hover-cars at all
+  noOutline: 0,      // [ADDED] OUTLINE CHOICE (Luna, Nov 23): 1 = no automatic dark outline around pictures (draw your own). 0 = the thin outline, like before
   expBase: 20,       // EXP to get to level 2. The next level needs expBase × your level ^ expCurve
   expCurve: 1,       // 1: every level needs expBase more than the last (20, 40, 60...). 1.5 or 2: later levels need a lot more
   expGain: 100,      // % of their EXP that enemies give (50: half as much)
@@ -2825,7 +2878,8 @@ const ITEMS = {
   scrollSun:    { name: 'Scroll: the Sun art', type: 'scroll', art: 'sun', about: 'Teaches the Sun art: crafting with holy fire.' },
   // ---- [ADDED] CRAFTING: technological armor and magical weapons, made at the forge (see CRAFTING) ----
   plasmaPlate:   { name: 'Plasma plate',       type: 'armor',  bonusHp: 150, defense: 4, about: '+150 max HP and 4 defense. Capital plating, rewired. Crafted.' },
-  seraphWings:   { name: 'Seraph wings',       type: 'armor',  bonusHp: 100, speed: 2, mp: 20, about: '+100 max HP, +2 speed, +20 max MP. Brass wings that actually work. Crafted.' },
+  seraphWings:   { name: 'Seraph wings',       type: 'armor',  bonusHp: 100, speed: 2, mp: 20, about: '+100 max HP, +2 speed, +20 max MP. Brass wings that actually work: press Q on the map to fly. Crafted.',
+                   wornPic: 'seraphWingsWorn', fly: { seconds: 6, speed: 2, cooldown: 20 } },   // [ADDED] DRAWN GEAR + WINGS
   aetherCloak:   { name: 'Aether cloak',       type: 'armor',  bonusHp: 120, maxMp: 110, mpRegen: 8, about: '+120 max HP. Max MP becomes 110 and you get 8 back every turn. Cut from the dark between stars. Crafted (the Aether art).' },
   sunMail:       { name: 'Sun mail',           type: 'armor',  bonusHp: 170, defense: 5, about: '+170 max HP and 5 defense. It’s warm to the touch, always. Crafted (the Sun art).' },
   voidEdge:      { name: 'Void edge',          type: 'weapon', damage: 55, pierce: true, crack: true, about: '+55 attack. Pierces power shields and cracks shields. A blade made of nothing. Crafted.' },
@@ -7045,9 +7099,11 @@ function laneRuns() {   // each stretch of one lane, from where cars come in to 
   }));
   return runs;
 }
-function newCar(run, p) { return { run, p, speed: 5 + Math.random() * 3.5, color: CAR_COLORS[Math.floor(Math.random() * CAR_COLORS.length)], id: ++CARS.n }; }
+// [CHANGED] CARS: speeds from the Balance tab
+function newCar(run, p) { const lo = Number(BALANCE.carSpeedMin) || 5, hi = Math.max(lo, Number(BALANCE.carSpeedMax) || lo); return { run, p, speed: lo + Math.random() * (hi - lo), color: CAR_COLORS[Math.floor(Math.random() * CAR_COLORS.length)], id: ++CARS.n }; }
 function carTick() {
   if (typeof gameStarted === 'undefined' || !gameStarted || !MAP) return;
+  if (Number(BALANCE.noCars)) { if (CARS.list.length) { CARS.list = []; drawCars(); } return; }   // [ADDED] CARS: turned off
   const now = performance.now();
   if (CARS.grid !== MAP) {   // a new map: its lanes, and some traffic already going
     CARS.grid = MAP; CARS.runs = laneRuns(); CARS.list = [];
@@ -7059,8 +7115,9 @@ function carTick() {
   if (currentPage !== 'play') return;
   CARS.runs.forEach(r => {
     if (now < r.next) return;
-    if (CARS.list.filter(c => c.run === r).length < 2) CARS.list.push(newCar(r, -1));
-    r.next = now + 7000 + Math.random() * 8000;
+    const most = Number.isFinite(Number(BALANCE.carsPerLane)) ? Number(BALANCE.carsPerLane) : 2, gLo = Number(BALANCE.carGapMin) || 7, gHi = Math.max(gLo, Number(BALANCE.carGapMax) || gLo);   // [CHANGED] CARS
+    if (CARS.list.filter(c => c.run === r).length < most) CARS.list.push(newCar(r, -1));
+    r.next = now + (gLo + Math.random() * (gHi - gLo)) * 1000;
   });
   CARS.list.forEach(c => { c.p += c.speed * dt; });
   CARS.list = CARS.list.filter(c => c.p < c.run.cells.length + 1.5);
@@ -7075,7 +7132,7 @@ function carHits(now) {
       const q = c.run.cells[i];
       if (!q || q.x !== state.pos.x || q.y !== state.pos.y) continue;
       CARS.safe = now + 1500;
-      const dmg = Math.max(3, Math.round(maxHp() * 0.08));
+      const pct = Number.isFinite(Number(BALANCE.carDamage)) ? Number(BALANCE.carDamage) : 8, dmg = pct > 0 ? Math.max(1, Math.round(maxHp() * pct / 100)) : 0;   // [CHANGED] CARS: the Balance tab
       state.hp = Math.max(1, state.hp - dmg);   // it hurts, but a car never kills you
       const [dx, dy] = c.run.dir;
       let to = null;   // thrown to the side of the road
@@ -7288,6 +7345,78 @@ Object.values(ENEMIES).forEach(e => {
   ['bog', 'bog_village', 'bog_shrine'].forEach(id => { if (MAPS[id] && MAPS[id].alertShift === undefined) MAPS[id].alertShift = -3; });
 })();
 
+// [ADDED] THE STORY AS A LIST (Luna, Nov 23: "I can't edit how the story of the world goes"). One step after another: each
+// step's goal is what the stats bar and the Journal tell you to do, until its flag is done (a boss with that id beaten, or a
+// flag the game sets, like bogCrossed). {clues} in a goal = the clues you've found. Change, add, reorder or remove steps in
+// the Game Maker (📜 Story at the top). Where you can actually go is still up to the maps' locks (lockedBy).
+var STORY = [
+  {
+  "flag": "ogre",
+  "goal": "Your village is under attack! Fight off the goblins and the Ogre."
+  },
+  {
+  "flag": "goblinBaseFound",
+  "goal": "Find out where the goblins came from: ask around the nearby villages ({clues} clues)."
+  },
+  {
+  "flag": "samurai",
+  "goal": "The goblin base’s gates are shut tight. Go to Westhold, the Empire’s seat on the northern plains, and make them send soldiers. The Swordsman guards its castle gate."
+  },
+  {
+  "flag": "royalGuardOut",
+  "goal": "Westhold is wrong: its soldiers hum, and its king doesn’t blink. The great hall’s iron gate is sealed by magic: beat the Keeper of the Seal in the castle chapel (the great hall’s east door)."
+  },
+  {
+  "flag": "evilKing",
+  "goal": "The gate is open. Get past the Royal Guard to the throne room, and face the king."
+  },
+  {
+  "flag": "trueKing",
+  "goal": "Find the true king in Westhold castle’s cells."
+  },
+  {
+  "flag": "orcWarlord",
+  "goal": "The king’s men march with you: storm the goblin base in the mountain pass (east, past the goblin camp), climb to the top, and beat the Orc Warlord."
+  },
+  {
+  "flag": "bogCrossed",
+  "goal": "The king sends you east: if this happened in Westhold, it may be worse in the capital. Through the pass and the frontier. The road east is gone: go through the Deep Darkness."
+  },
+  {
+  "flag": "farSide",
+  "goal": "The Deep Darkness comes out in Dragon’s Valley. Follow the Long Canyon to the Hall of Caves and beat one of its great dragons: its cave takes you through to the Far Side, and the Far Side’s gate opens onto the Capital’s outskirts."
+  },
+  {
+  "flag": "valleyCrossed",
+  "goal": "You made it through Dragon’s Valley. The Capital’s west gate is north-east, across the outskirts."
+  },
+  {
+  "flag": "highPriest",
+  "goal": "The Capital is enormous, and rotten. Its power comes from the Cathedral of the Pact, in the Holy Quarter (north-west, past Imperial Heights). It’s closed to the flock: ask the gravedigger in the cemetery about another way in. Stop the High Priest. (The samurai won’t start a fight.)"
+  },
+  {
+  "flag": "sageCouncil",
+  "goal": "The Sages hide in the Arcanum, the crystal tower behind its wall in the Spires (north-east). Its gate is open now. They sit under its dome: take the elevator at the back of the hall to the top. All of them at once."
+  },
+  {
+  "flag": "portalGolem",
+  "goal": "The Rift Foundry powers the palace. It’s in the Foundry Ward (south-east, past the Neon Market), and its gate is open now. The Portal Golem guards it."
+  },
+  {
+  "flag": "theGeneral",
+  "goal": "The General holds the Iron Dojo, behind its wall in Imperial Heights (the west side). Beat him, and nobody is left to guard the palace."
+  },
+  {
+  "flag": "theEmperor",
+  "goal": "The palace gate is open: up the Spine to the top of Imperial Heights, through the long hall, to the Emperor’s throne."
+  },
+  {
+  "flag": "kingOfHell",
+  "goal": "The Empire has fallen. The east gate is open: the King of Hell waits in the Darklands (optional). The flying machine is yours: the dragon lands and the New World lie out at sea."
+  }
+  ];
+var STORY_END = "The Empire is gone and the world is yours. Hunt the dragon gods, raise your banner in the New World, or find the secret boss.";   // when every step is done
+
 /* ===================== [ADDED] GAME MAKER CHANGES ===================== */
 /*
    What you changed in the Game Maker (map-maker.html: the Enemies, Items, People and Maps tabs).
@@ -7337,6 +7466,8 @@ function applyMakerChanges(ch) {
   merge(ITEMS, ch.items);
   merge(NPCS, ch.npcs);
   merge(SHOPS, ch.shops);
+  if (Array.isArray(ch.story)) STORY = ch.story.filter(st => st && st.flag);   // [ADDED] THE STORY AS A LIST
+  if (typeof ch.storyEnd === 'string' && ch.storyEnd) STORY_END = ch.storyEnd;
   Object.entries(ch.maps || {}).forEach(([id, fields]) => { if (MAPS[id] && fields) Object.assign(MAPS[id], fields); });
   // the Balance tab (see BALANCE)
   Object.entries((ch.balance && ch.balance.game) || {}).forEach(([k, v]) => { if (k in BALANCE && v !== null && Number.isFinite(Number(v))) BALANCE[k] = Number(v); });
@@ -7458,6 +7589,18 @@ makerTidy();   // [ADDED] CHANGE ANYTHING
 Object.keys(SHOPS).forEach(id => { if (!MAPS['shop_' + id]) { const m = shopRoom(id); m.grid = m.rows.map(row => row.trim().split(/\s+/)); MAPS['shop_' + id] = m; } });
 Object.values(TILES).forEach(t => { if (t.shop && !t.bump && !t.enter) { t.enter = 'shop_' + t.shop; t.door = true; } });
 
+// [ADDED] PAINTED ROOMS (Nov 23): shops, guild halls, houses, nests, the dragon lands, the Skyway and the Undercity are built by
+// the code, so the Game Maker can't write their squares back into it. What you paint on them is kept in its changes instead
+// (mapRows), and put on them here, once they all exist.
+Object.entries((typeof MAKER_CHANGES !== 'undefined' && MAKER_CHANGES && MAKER_CHANGES.mapRows) || {}).forEach(([id, rows]) => {
+  if (MAPS[id] && Array.isArray(rows) && rows.length) { MAPS[id].rows = rows; MAPS[id].grid = rows.map(row => String(row).trim().split(/\s+/)); }
+});
+// (and the squares with their own ground on those maps, "thing~ground", like on every other map above)
+Object.values(MAPS).forEach(m => (m.grid || []).forEach(row => row.forEach(c => {
+  if (TILES[c] || typeof c !== 'string' || !(c.indexOf('~') > 0)) return;
+  const i = c.indexOf('~'), a = c.slice(0, i), b = c.slice(i + 1);
+  if (a !== '@' && TILES[a] && TILES[b]) TILES[c] = squareOn(TILES[a], TILES[b], b);
+})));
 prepareMobs();   // [ADDED] regular enemies and walking people become movers (see below)
 buildLinks();    // [ADDED] see ROOMS AND DUNGEONS
 
@@ -9732,6 +9875,15 @@ function centered(rows) {
 
 // Builds the picture for any weapon + armor combo (only once, then it's
 // remembered) and gives back its sprite name, so sprite(playerLook(...)) draws it.
+// [ADDED] DRAWN GEAR (Luna, Nov 23): weapons and armor can have a picture drawn in the Game Maker for how they look on you.
+//   heldPic: a weapon or staff in your hand (it replaces the automatic shape and colors)
+//   wornPic: drawn on top of the armor's usual look (wings, capes...). wornOnly: true leaves the usual look out.
+// The drawing lines up with you at the bottom middle; anything outside your square is cut off.
+function drawnPic(name) { const r = name && SPRITES[name]; return Array.isArray(r) && r.length && typeof r[0] === 'string' ? r : null; }
+function layerDrawn(bottom, top) {
+  const H = bottom.length, W = bottom[0].length, oy = top.length - H, ox = Math.floor((top[0].length - W) / 2);
+  return bottom.map((row, y) => [...row].map((ch, x) => { const t = (top[y + oy] || '')[x + ox]; return t && t !== '.' ? t : ch; }).join(''));
+}
 function playerLook(weaponId, armorId, formKey) {
   const fk = formKey && FORMS[formKey] ? formKey : null;   // [ADDED] FORMS YOU CAN SEE
   const name = `look:${weaponId || 'fists'}:${armorId || 'clothes'}` + (fk ? `:form:${fk}:${formLookSig(fk)}` : '');
@@ -9740,13 +9892,17 @@ function playerLook(weaponId, armorId, formKey) {
     SPRITE_URLS[name] = SPRITE_URLS[FORMS[fk].look] || drawPixels(SPRITES[FORMS[fk].look]);
     return name;
   }
-  const a = armorId ? (ARMOR_LOOKS[armorId] || DEFAULT_ARMOR_LOOK) : NO_ARMOR_LOOK;
+  const ai = (armorId && ITEMS[armorId]) || {}, worn = drawnPic(ai.wornPic);   // [ADDED] DRAWN GEAR
+  const a = armorId && !(worn && ai.wornOnly) ? (ARMOR_LOOKS[armorId] || DEFAULT_ARMOR_LOOK) : NO_ARMOR_LOOK;
   let rows = PLAYER_BASE;
   (a.parts || []).forEach(p => { if (ARMOR_PARTS[p]) rows = layer(rows, ARMOR_PARTS[p]); });   // [ADDED] armor shapes
   if (a.helmet) rows = layer(rows, HELMETS[a.helmet]);
   rows = recolor(rows, a.colors);
+  if (worn) rows = layerDrawn(rows, worn);   // [ADDED] DRAWN GEAR: what you drew for this armor, on top
   if (fk) rows = formHybridRows(rows, formDragonSprite(fk), FORMS[fk].color);   // [ADDED] FORMS YOU CAN SEE
-  if (weaponId) {
+  const held = weaponId ? drawnPic((ITEMS[weaponId] || {}).heldPic) : null;   // [ADDED] DRAWN GEAR: a weapon you drew in your hand
+  if (held) rows = layerDrawn(rows, held);
+  else if (weaponId) {
     const w = handLook(weaponId) || WEAPON_LOOKS[weaponId] || (ITEMS[weaponId] && ITEMS[weaponId].type === 'magic' ? DEFAULT_STAFF_LOOK : DEFAULT_WEAPON_LOOK);   // [ADDED] staffs. [ADDED] WEAPON PICTURES
     rows = layer(rows, recolor(WEAPON_SHAPES[w.shape], { ...w.colors, h: 's' }));
   }
@@ -9901,7 +10057,7 @@ function drawPixels(rows, bare) {   // [ADDED] bare: no outline (CRISP BIG PICTU
   canvas.width = w + pad * 2;
   canvas.height = h + pad * 2;
   const ctx = canvas.getContext('2d');
-  if (!fullSquare && !bare) {
+  if (!fullSquare && !bare && !Number(BALANCE.noOutline)) {   // [ADDED] OUTLINE CHOICE: the Game Maker's Balance tab can turn it off
     ctx.fillStyle = OUTLINE_COLOR;
     for (let y = -1; y <= h; y++) {
       for (let x = -1; x <= w; x++) {
@@ -10520,6 +10676,13 @@ Object.entries(MEGA_ART).forEach(([name, rows]) => { SPRITES[name] = rows.map(r 
 // dummy, the war gong, a cherry tree, the Emperor's portrait, the great bell (redraw any of them in the Game Maker)
 const LANDMARK_ART = {"stainedGlass":[".16",".7k2.7",".6kfyk.6",".5kfy2fk.5",".4kfyk2y2k.4",".3kfy2k2yfyk.3",".3k10.3",".3krmrk2n3k.3",".3Rr3k2njnN.3",".3kr3k2n3k.3",".3k10.3",".3kn3k2p2ik.3",".3kjn2k2p3k.3",".3kn3k2p3k.3",".3k10.3",".2a12.2"],"roseWindow":[".16",".4k8.4",".3k2r3kp2k2.3",".2k2r3nyp3k2.2",".k2nkn3y3kjk2.",".kn2rkn2y2kpj2k.",".kn2r2k4p2j2k.",".k2r3ky2kp3jk.",".kjp3ky2kr3k2.",".kj2p2k4r2n2k.",".kj2pky2n2krn2k.",".k2jky3n3knk2.",".2k2p3ynr3k2.2",".3k2p2kr3k2.3",".4k8.4",".16"],"organPipes":[".6wCwC.6",".6cCcC.6",".4wCcCcCwC.4",".4cCcCcCcC.4",".2wCcCcCcCcCwC.2",".2cCcCcCcCcCcC.2","wCcCcCcCcCcCcCwC","cCcCcCcCcCcCcCcC","cCcCcCcCcCcCcCcC","k16","cCcCcCcCcCcCcCcC","cCcCcCcCcCcCcCcC","y16","B16","Bb14B","B16"],"pactAltar":[".16",".3f.3f.4f.3",".3o.3o.4o.3",".3q.3q.4q.3",".3q.3q.4q.3",".3q.3q.4q.3",".3q.3q.4q.3",".a14.",".xRr10Rx.",".xRr4Er5Rx.",".xR5E2R5x.",".xR6ER5x.",".x14.",".x14.",".x14.",".k14."],"pactSigil":[".16",".6R4.6",".4R3.2R3.4",".3R2.6R2.3",".2R2.2E.E.3R2.2",".2R.2E.7R.2",".R2.E.2E2.4R2.",".R.4E4.E.2R.",".R.2E.E4.4R.",".R2.4E2.2E.R2.",".2R.7E.2R.2",".2R2.3E.E.2R2.2",".3R2.6R2.3",".4R3.2R3.4",".6R4.6",".16"],"magicCircle":[".16",".6im2i.6",".4i3.2i3.4",".3i2.6i2.3",".2i2.3i.i.2i2.2",".2i.7i.2i.2",".i2.8i.i2.",".m.2i.2wi.5m.",".m.5iw.2i.2m.",".p2.i.8p2.",".2p.2i.7p.2",".2p2.2i.i.3p2.2",".3p2.6p2.3",".4p3.2p3.4",".6pm2p.6",".16"],"trainingDummy":[".16",".6t4.6",".6kt2k.6",".6t4.6",".6T4.6",".6t4.6",".3Bb2twt2b2B.3",".3Bbtwr2t2bB.3",".5t2r2wt.5",".5t3wt2.5",".6t4.6",".5T6.5",".7B2.7",".7B2.7",".7B2.7",".7B2.7"],"gong":[".16",".b14.",".B14.",".2B.3k.2k.3B.2",".2B.10B.2",".2B.2Y6.2B.2",".2B.Yf2y4Y.B.2",".2B.Yfy5Y.B.2",".2BYf2y6YB.2",".2BYy3Y2y3YB.2",".2BYy8YB.2",".2B.Yy6Y.B.2",".2B.Yy6Y.B.2",".2B.2Y6.2B.2",".2B.10B.2",".2B.10B.2"],"sakura":[".6i3w.6",".3i2wmi3wmi.3",".2mi3wmi3wmi.2",".iwmi3wmi3wmi.",".i2wmi3wmi3wm.",".i3wmi3wmi3w.",".mi3wmi3wmi3.",".wmi3wmi3wmi2.",".2wmi3wmi3wm.2",".3wmBiB2mi3.3",".6bB2wB.5",".7B2b.6",".7B2.3i.3",".2i.4B2.7",".7B2.7",".4i.2B2.4i.2"],"portrait":[".16",".y14.",".yY12y.",".yYP2yfy2fyP2Yy.",".yYP2y6P2Yy.",".yYP3s4P3Yy.",".yYP3ks2kP3Yy.",".yYP3s4P3Yy.",".yYP3se2sP3Yy.",".yYP4s2P4Yy.",".yYPR3y2R3PYy.",".yYPR3y2R3PYy.",".yYPR3y2R3PYy.",".yY12y.",".y14.",".16"],"bigBell":[".16",".2B12.2",".2B5b2B5.2",".5Yyfy2Y.5",".5Yyfy2Y.5",".5Yyfy2Y.5",".4Yyfy4Y.4",".4Yyfy4Y.4",".3Yyfy6Y.3",".3Yyfy6Y.3",".3Yyfy6Y.3",".2Yy10Y.2",".2Yy10Y.2",".Y14.",".7O2.7",".7O2.7"],"pactBanner":["kY14k",".3dR8d.3",".3dR8d.3",".3dR3E2R3d.3",".3dRE2R2E2Rd.3",".3dRER4ERd.3",".3dRERE2RERd.3",".3dRER4ERd.3",".3dRE2R2E2Rd.3",".3dR3E2R3d.3",".3dR8d.3",".3dR8d.3",".3d10.3",".3R3.4R3.3",".3R2.6R2.3",".3d.8d.3"],"warBanner":["kY14k",".3kx8k.3",".3kx8k.3",".3kx3y2x3k.3",".3kxy6xk.3",".3kxyxy2xyxk.3",".3kxy6xk.3",".3kxyxy2xyxk.3",".3kxy6xk.3",".3kx3y2x3k.3",".3kx8k.3",".3kx8k.3",".3k10.3",".3x3.4x3.3",".3x2.6x2.3",".3k.8k.3"]};
 Object.entries(LANDMARK_ART).forEach(([name, rows]) => { SPRITES[name] = rows.map(r => r.replace(/(\D)(\d+)/g, (m, c, n) => c.repeat(Number(n)))); });
+// [ADDED] DRAWN GEAR: the seraph wings on your back (a starting point: redraw them in the Game Maker, Items → Seraph wings → Worn on you)
+SPRITES.seraphWingsWorn = [
+  '................', '................', '................',
+  'y..............y', 'Yy............yY', 'YYy..........yYY', 'OYYy........yYYO', '.OYY........YYO.',
+  '.OY..........YO.', '.O............O.',
+  '................', '................', '................', '................', '................', '................',
+];
 function buildSprites() {
   Object.entries(SPRITES).forEach(([name, rows]) => {
     if (rows.length * (rows[0] || '').length > 1024) {   // [ADDED] DEPTH: a big picture: drawn the first time something asks for it
@@ -10616,7 +10779,7 @@ function sprite(name, size = '', extraClass = '') {
   if (!SPRITE_URLS[name]) return '';
   const smooth = SPRITE_FILES[name] ? ' smooth' : '';   // [ADDED] big art shrinks smoothly
   const tall = picSquares(name);   // [ADDED] BIGGER PICTURES
-  const bare = (size === 'big' || size === 'hero') && !smooth ? bareUrl(name) : '';   // [ADDED] CRISP BIG PICTURES
+  const bare = (size === 'big' || size === 'hero') && !smooth && !Number(BALANCE.noOutline) ? bareUrl(name) : '';   // [ADDED] CRISP BIG PICTURES. [ADDED] OUTLINE CHOICE: no outline, no crisp edge either
   return `<span class="sprite ${size} ${extraClass}${smooth}${tall ? ' tallsprite' : ''}${bare ? ' crisp' : ''}" style="background-image:url('${bare || SPRITE_URLS[name]}')${tall ? `;--pw:${tall.w};--ph:${tall.h};--pf:${tall.f}` : ''}" aria-hidden="true"></span>`;
 }
 // [ADDED] CRISP BIG PICTURES: the picture without its baked-in outline (made once per picture), from the exact rows
@@ -11401,27 +11564,13 @@ function done(flag) {
 
 // [ADDED] What the story wants you to do next. Shown in the stats bar and
 // the Journal, and the village elder will remind you.
-function currentGoal() {
-  // [ADDED] THE STORY (see INTRO): the invasion, the clues, the goblin base, the alliance, the city.
-  if (!done('ogre')) return 'Your village is under attack! Fight off the goblins and the Ogre.';
-  if (DEMO) return 'Explore the world! The rest of the story (and playing online) is in the full game.';   // [ADDED] see FREE DEMO
-  // [ADDED] THE FALL OF THE EMPIRE: the new order of the story
-  if (!done('goblinBaseFound')) return `Find out where the goblins came from: ask around the nearby villages (${clueCount()}/${CLUES.length} clues).`;
-  if (!done('samurai')) return 'The goblin base’s gates are shut tight. Go to Westhold, the Empire’s seat on the northern plains, and make them send soldiers. The Swordsman guards its castle gate.';
-  if (!done('royalGuardOut')) return 'Westhold is wrong: its soldiers hum, and its king doesn’t blink. The great hall’s iron gate is sealed by magic: beat the Keeper of the Seal in the castle chapel (the great hall’s east door).';   // [ADDED] THE MINI CHAPEL
-  if (!done('evilKing')) return 'The gate is open. Get past the Royal Guard to the throne room, and face the king.';
-  if (!done('trueKing')) return 'Find the true king in Westhold castle’s cells.';
-  if (!done('orcWarlord')) return 'The king’s men march with you: storm the goblin base in the mountain pass (east, past the goblin camp), climb to the top, and beat the Orc Warlord.';
-  if (!done('bogCrossed')) return 'The king sends you east: if this happened in Westhold, it may be worse in the capital. Through the pass and the frontier. The road east is gone: go through the Deep Darkness.';
-  if (!done('farSide')) return 'The Deep Darkness comes out in Dragon’s Valley. Follow the Long Canyon to the Hall of Caves and beat one of its great dragons: its cave takes you through to the Far Side, and the Far Side’s gate opens onto the Capital’s outskirts.';   // [ADDED] THROUGH THE VALLEY
-  if (!done('valleyCrossed')) return 'You made it through Dragon’s Valley. The Capital’s west gate is north-east, across the outskirts.';
-  if (!done('highPriest')) return 'The Capital is enormous, and rotten. Its power comes from the Cathedral of the Pact, in the Holy Quarter (north-west, past Imperial Heights). It’s closed to the flock: ask the gravedigger in the cemetery about another way in. Stop the High Priest. (The samurai won’t start a fight.)';   // [ADDED] THE CAPITAL, REBUILT
-  if (!done('sageCouncil')) return 'The Sages hide in the Arcanum, the crystal tower behind its wall in the Spires (north-east). Its gate is open now. They sit under its dome: take the elevator at the back of the hall to the top. All of them at once.';
-  if (!done('portalGolem')) return 'The Rift Foundry powers the palace. It’s in the Foundry Ward (south-east, past the Neon Market), and its gate is open now. The Portal Golem guards it.';
-  if (!done('theGeneral')) return 'The General holds the Iron Dojo, behind its wall in Imperial Heights (the west side). Beat him, and nobody is left to guard the palace.';
-  if (!done('theEmperor')) return 'The palace gate is open: up the Spine to the top of Imperial Heights, through the long hall, to the Emperor’s throne.';
-  if (!done('kingOfHell')) return 'The Empire has fallen. The east gate is open: the King of Hell waits in the Darklands (optional). The flying machine is yours: the dragon lands and the New World lie out at sea.';
-  return 'The Empire is gone and the world is yours. Hunt the dragon gods, raise your banner in the New World, or find the secret boss.';
+function currentGoal() {   // [CHANGED] THE STORY AS A LIST: the steps are in STORY now
+  for (let i = 0; i < STORY.length; i++) {
+    if (i === 1 && DEMO) return "Explore the world! The rest of the story (and playing online) is in the full game.";   // see FREE DEMO: the demo stops after the first step
+    const st = STORY[i];
+    if (st && st.flag && !done(st.flag)) return String(st.goal || '').replace(/\{clues\}/g, `${clueCount()}/${CLUES.length}`);
+  }
+  return STORY_END;
 }
 
 // Helpers for the player's numbers
@@ -11580,6 +11729,25 @@ function queueStep(x, y) {
   }, Math.max(0, nextStepAt - Date.now()));
 }
 
+// [ADDED] WINGS (Luna, Nov 23): armor with fly: { seconds, speed, cooldown, overEnemies } (set in the Game Maker: Items → the armor
+// → Wings). Press Q on the map to take off: for that many seconds you walk speed times faster and hover over people walking
+// around (and enemies too, with overEnemies). cooldown: seconds your wings rest before the next flight.
+function wingsGear() { const a = armor(); return a && a.fly && Number(a.fly.seconds) > 0 ? a.fly : null; }
+function winged() { return Date.now() < (state.wingsUntil || 0) && Boolean(wingsGear()); }
+function hoverOver(mob) { const f = winged() && wingsGear(); return Boolean(f && mob && (mob.npc || (f.overEnemies && mob.enemy))); }
+function takeFlight() {
+  const f = wingsGear(), now = Date.now();
+  if (!f) return;
+  if (winged()) return say('You’re already in the air!');
+  const rest = (state.wingsReadyAt || 0) - now;
+  if (rest > 0) return say(`Your wings need ${Math.ceil(rest / 1000)}s more rest.`);
+  const ms = Number(f.seconds) * 1000;
+  state.wingsUntil = now + ms;
+  state.wingsReadyAt = state.wingsUntil + (Number(f.cooldown) || 0) * 1000;
+  say(`You take off! (${+Number(f.seconds).toFixed(1)}s)`);
+  renderMap();
+  setTimeout(() => { if (!winged()) { say('You land.'); renderMap(); } }, ms + 30);
+}
 function tryMove(x, y) {
   if (overlayMode) return;
   if (Date.now() < rootedUntil) return say(rootedSay || 'You can’t move yet!');   // [ADDED] MAP MOVES, PART 3: you're firing
@@ -11604,7 +11772,7 @@ function tryMove(x, y) {
 
   // [ADDED] Walking into someone who's walking around: fight or talk.
   const mob = mobAt(x, y);
-  if (mob && distance === 1) {
+  if (mob && distance === 1 && !hoverOver(mob)) {   // [ADDED] WINGS: flying, you go over them
     // [ADDED] MAP COMBAT 2: CLICK an enemy next to you with a sword (or fists) and you slash it first; it turns on you, hurt.
     // (Walking into one with the arrow keys still asks first, so you never slash by accident.)
     if (slashClick && canSlash(mob)) return mapAttack(mob);
@@ -11677,12 +11845,14 @@ function tryMove(x, y) {
   if (now < nextStepAt) return queueStep(x, y);
   nextStepAt = now + (STEP_TIME / playerSpeed()) * (target && target.wade ? WADE_SLOW : 1)   // [ADDED] deep water is slow
     * (now < (state.slowUntil || 0) ? 2 : 1)   // [ADDED] slowed (slime!) walks at half speed
-    * (now < (state.hasteUntil || 0) ? 0.5 : 1);   // [ADDED] HASTE: twice as fast
+    * (now < (state.hasteUntil || 0) ? 0.5 : 1)   // [ADDED] HASTE: twice as fast
+    * (winged() ? 1 / Math.max(1, Number(wingsGear().speed) || 2) : 1);   // [ADDED] WINGS: faster in the air
 
   state.prevPos = { ...state.pos };
   state.pos = to;
   lastStepDir = [Math.sign(to.x - state.prevPos.x), Math.sign(to.y - state.prevPos.y)];   // [ADDED] DASHES: the way you last walked
   const t = tileAt(to);
+  if (t && t.lane && !(tileAt(state.prevPos) || {}).lane && Date.now() - laneWarnAt > 15000) { laneWarnAt = Date.now(); setTimeout(() => say('⚠ You’re on the highway: hover-cars come through here. Cross where it’s clear!'), 0); }   // [ADDED] HIGHWAYS
   renderMap();
   pushMe();
 
@@ -12019,8 +12189,9 @@ function leaveByEdge(to) {
     if (out.flag) state.flags[out.flag] = true;   // [ADDED] like crossing the Deep Bog
     state.mapStack = [];            // a fixed exit goes straight out to the world
     const from = { ...state.pos };
+    lastEdgeSide = side;   // [ADDED] TRANSITIONS: a slide comes in from this side
     setMap(out.map);
-    state.pos = out.keep ? edgeArrival(out, side, from) : { x: out.x, y: out.y };   // [ADDED] THE MEGACITY: the same street carries on in the next district
+    state.pos = out.keep ? edgeArrival(out, side, from) : Number.isFinite(out.x) && Number.isFinite(out.y) ? { x: out.x, y: out.y } : { ...(MAPS[out.map].arrive || { x: 1, y: 1 }) };   // [ADDED] no spot set: its arrive point   // [ADDED] THE MEGACITY: the same street carries on in the next district
     arrive();
   } else {
     exitMap();
@@ -12029,7 +12200,10 @@ function leaveByEdge(to) {
 
 // [ADDED] After changing maps: redraw, tell the server, save.
 function arrive() {
-  mapFade();                    // [ADDED] THE MEGACITY: a short fade through every door, gate and edge
+  mapFade();
+  offTheHighway();   // [ADDED] HIGHWAYS
+  areaBanner();      // [ADDED] WHERE AM I
+  if (mapViewHere() && !mapHintShown && megaHere()) { mapHintShown = true; setTimeout(() => say('Lost? The map is in the top right corner: click it, or press M for the big one.'), 3600); }   // [ADDED] A MAP YOU CAN OPEN                    // [ADDED] THE MEGACITY: a short fade through every door, gate and edge
   raid = null;                  // [ADDED] a new town: no raid yet (see RAIDS)
   jobHooks(null);               // [ADDED] MORE KINDS OF JOBS: a job that sent you here
   applyMapChanges(state.map);   // [ADDED] see MAP CHANGES
@@ -12890,9 +13064,55 @@ var SCENES = {
     { name: 'The dragon lands', sprite: 'valleyGate', text: 'Black stone, hot wind, and the sound of wings. Every dragon you ever fought was a hatchling next to these.' },
     { name: 'Dragon sage', sprite: 'elder', text: '“Welcome, godslayer. Or god-food. We’ll see. Talk to me before you go looking for them.”' } ] },
 };
+// [ADDED] VIDEO CUTSCENES (Luna, Nov 23: everyday cutscenes are text, but the important ones should be animated, like in a lot of
+// games). A scene line with video: 'videos/intro.mp4' (a file next to index.html on GitHub: mp4 or webm) or a YouTube link plays
+// it full screen with its sound, then the scene goes on. The same works for big attacks: an enemy move or a spell with video
+// plays it when it's used (videoOnce: only the first time). Skip, or Esc, skips it. The game's music waits while it plays.
+function playVideoAsync(src, o) { return new Promise(res => playVideo(src, res, o)); }
+function playVideo(src, done, o = {}) {
+  const key = 'vid_' + String(src);
+  if (!src || (o.videoOnce && state.flags && state.flags[key])) { if (done) done(); return; }
+  if (o.videoOnce && state.flags) state.flags[key] = true;
+  const yt = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([\w-]{6,})/.exec(String(src));
+  const box = document.createElement('div');
+  box.className = 'cutvideo';
+  box.innerHTML = (yt ? `<iframe src="https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen title="Cutscene"></iframe>`
+    : `<video src="${esc(src)}" autoplay playsinline></video>`) + `<button type="button" class="btn cutskip">${yt ? 'Continue ▶' : 'Skip ▶▶'}</button>`;
+  document.body.appendChild(box);
+  const prevMode = overlayMode;
+  if (!overlayMode) overlayMode = 'video';   // (nothing on the map moves while it plays)
+  const vol = music.master ? music.master.gain.value : null;
+  if (music.master) music.master.gain.value = 0;
+  let over = false;
+  const keys = ev => { ev.stopPropagation(); if (ev.key === 'Escape') { ev.preventDefault(); finish(); } };
+  const finish = () => {
+    if (over) return;
+    over = true;
+    window.removeEventListener('keydown', keys, true);
+    box.remove();
+    if (music.master && vol !== null) music.master.gain.value = vol;
+    if (overlayMode === 'video') overlayMode = prevMode;
+    if (done) done();
+  };
+  window.addEventListener('keydown', keys, true);
+  box.querySelector('.cutskip').onclick = finish;
+  box.querySelector('.cutskip').focus();
+  const v = box.querySelector('video');
+  if (v) {
+    v.volume = Math.max(0, Math.min(1, Number(o.videoVolume ?? 1) * (typeof music.vol === 'number' ? Math.max(0.3, music.vol * 2) : 1)));
+    v.onended = finish;
+    v.onerror = () => { finish(); say(`That video isn’t on the website yet (${src}).`); };
+    v.play().catch(() => { v.muted = true; v.play().catch(() => {}); });   // (a browser that blocks sound still shows it)
+  }
+}
 function playLines(lines, then) {
-  const list = (lines || []).filter(l => l && (l.text || l.image || l.effect || l.music));   // [ADDED] CUTSCENES: a line can be just a picture or an effect
+  const list = (lines || []).filter(l => l && (l.text || l.image || l.effect || l.music || l.video));   // [ADDED] CUTSCENES: a line can be just a picture or an effect. [ADDED] video
   if (!list.length) { if (then) then(); return; }
+  if (list[0].video) {   // [ADDED] VIDEO CUTSCENES: the video first, then whatever else the line has
+    const v = list[0], rest = list.slice(1);
+    if (v.text || v.image || v.effect || v.music) rest.unshift(Object.assign({}, v, { video: null }));
+    return playVideo(v.video, () => playLines(rest, then), v);
+  }
   const first = list[0];
   const same = [];
   while (list.length && list[0].name === first.name && list[0].sprite === first.sprite) same.push(list.shift());   // [ADDED] CUTSCENES: the whole line (its picture, effect and music go with it)
@@ -13471,6 +13691,7 @@ async function castSpell(id) {
   const sp = ITEMS[id];
   if (youSilenced()) return step('You’re silenced! You can’t get the words out.');   // [ADDED]
   state.mp -= sp.mpCost;
+  if (sp.video) await playVideoAsync(sp.video, sp);   // [ADDED] VIDEO CUTSCENES: a spell's animation
   let dealt = 0;
   if (sp.damage) {
     await step(`You cast ${sp.name}!`);
@@ -13631,6 +13852,7 @@ async function enemyTurn() {
 
 // Ability damage also goes through rollDamage(), so it varies like attacks.
 async function useAbility(e, a) {
+  if (a.video) await playVideoAsync(a.video, a);   // [ADDED] VIDEO CUTSCENES: a big attack's animation
   if (a.say) await step(a.say);   // [ADDED] a line before it happens
   if (a.shield) {   // [ADDED] power shield or ward
     raiseShield(a.shield);
@@ -15499,11 +15721,11 @@ function groundAround(x, y) {
 }
 
 function tileClass(t, x, y) {
-  if (!t.look && !t.marsh && t.kind !== 'wall' && !t.bg && !t.color) t = { ...t, ...((tileSprite(t) && groundAround(x, y)) || plainGround(t)) };   // [ADDED] see SPRITE BACKGROUNDS. [ADDED] bg, color: set in the Game Maker
+  if (!t.look && !t.marsh && t.kind !== 'wall' && !t.bg && !t.color) t = { ...t, ...((tileSprite(t) && !Number(BALANCE.noAutoGround) && groundAround(x, y)) || plainGround(t)) };   // [ADDED] noAutoGround: NO MORE GUESSING   // [ADDED] see SPRITE BACKGROUNDS. [ADDED] bg, color: set in the Game Maker
   if (t.raised) return `${t.look || 'rd-roof'}${(x + y) % 2 ? ' alt' : ''}`;   // [ADDED] THE MEGACITY: a raised floor keeps its own look
   if (t.kind === 'wall' || t.look === 'wall') return 'wall';
   if (t.soon) return 'soon';
-  const stripe = (x + y) % 2 ? 'alt' : '';
+  const stripe = (x + y) % 2 && !seamlessHere() ? 'alt' : '';   // [CHANGED] LOOKS: without gaps, the checkerboard of light and dark squares went (one smooth ground)
   let ground = t.marsh ? `marsh ${stripe}` : stripe;
   if (t.look) ground = `${t.look} ${stripe}`;   // [ADDED] every look is a color in the CSS (.tile.snow and so on)
   return t.kind === 'blocked' ? `${ground} blocked` : ground;
@@ -15532,13 +15754,14 @@ let viewH = 9;    // how many rows are on screen
 let fitKey = '';   // [ADDED] the window size the map was last fitted to
 function fitView(force) {
   const box = document.querySelector('.map-scroll');
-  if (!box || box.clientWidth === 0) return;          // page hidden: keep last size
+  if (!box) return;
   // [ADDED] BUG FIX: work the size out once per window size (or a new map), not on every redraw. Before, a scrollbar
   // showing up made the map smaller, which took the scrollbar away, which made it bigger again: the "window dance".
   const bar = document.getElementById('actionBar');
   const barOn = Boolean(bar && !bar.hidden && bar.childElementCount);
   const key = `${window.innerWidth}x${window.innerHeight}|${MAP.length}x${MAP[0].length}|${barOn}|${viewBoost()}`;   // [ADDED] viewBoost: THE MEGACITY
   if (!force && key === fitKey) return;
+  if (box.clientWidth === 0) return;          // page hidden: keep last size   // [CHANGED] LAG FIX: only measured when the size might have changed (measuring on every redraw made the browser lay out the page twice per step)
   fitKey = key;
   const spaceW = box.clientWidth - 12;
   // [ADDED] Use the real screen too: a window inside another page can say it's taller than what you see.
@@ -15562,7 +15785,9 @@ function fitView(force) {
 // [ADDED] CAMERA. It stays still while you walk around the middle of the
 // screen, and only scrolls once you get within CAMERA_MARGIN squares of an edge.
 // Then it glides over (CAMERA_GLIDE_MS) instead of jumping.
-const CAMERA_MARGIN = 3;       // bigger = scrolls sooner, 0 = only at the very edge
+const CAMERA_SLACK = 1;        // [CHANGED] how far (in squares) you can drift from the middle before the camera follows.
+                               // It used to wait until you were 3 squares from the edge, so walking sideways you couldn't see ahead.
+let camGlideAt = 0;            // [ADDED] when the last glide started (see the glide in renderMap)
 const CAMERA_GLIDE_MS = 180;   // how long the glide takes (0 = no glide)
 const cam = { map: null, x: 0, y: 0, w: 0, h: 0 };   // top-left square on screen
 let cellPx = 36;               // square size in pixels (set by fitView)
@@ -15578,8 +15803,8 @@ function moveCamera() {
     cam.x = state.pos.x - Math.floor(viewW / 2);
     cam.y = state.pos.y - Math.floor(viewH / 2);
   } else {
-    const mx = Math.min(CAMERA_MARGIN, Math.floor((viewW - 1) / 2));
-    const my = Math.min(CAMERA_MARGIN, Math.floor((viewH - 1) / 2));
+    const mx = Math.max(0, Math.floor((viewW - 1) / 2) - CAMERA_SLACK);   // [CHANGED] CAMERA_SLACK
+    const my = Math.max(0, Math.floor((viewH - 1) / 2) - CAMERA_SLACK);
     if (state.pos.x < cam.x + mx) cam.x = state.pos.x - mx;
     if (state.pos.x > cam.x + viewW - 1 - mx) cam.x = state.pos.x - (viewW - 1 - mx);
     if (state.pos.y < cam.y + my) cam.y = state.pos.y - my;
@@ -15723,13 +15948,22 @@ function edgeArrival(out, side, from) {
 }
 
 // ---- a short fade through every door, gate and edge
+// [CHANGED] TRANSITIONS (Luna, Nov 23): each map picks how you arrive in it (transition: in the Game Maker, Maps → Getting in
+// and out): 'fade' (the quick one, the usual), 'black', 'slide' (in from the edge you walked off), 'zoom' or 'none'.
+var lastEdgeSide = null;
+const TRANSITION_CLASSES = ['mapfade', 'tr-black', 'tr-zoom', 'tr-slide-left', 'tr-slide-right', 'tr-slide-top', 'tr-slide-bottom'];
 function mapFade() {
+  const side = lastEdgeSide;
+  lastEdgeSide = null;
   if (typeof reduceMotion !== 'undefined' && reduceMotion) return;
   const box = document.querySelector('.map-scroll');
   if (!box) return;
-  box.classList.remove('mapfade');
+  const kind = (MAPS[state.map] && MAPS[state.map].transition) || 'fade';
+  const cls = kind === 'none' ? '' : kind === 'black' ? 'tr-black' : kind === 'zoom' ? 'tr-zoom' : kind === 'slide' && side ? `tr-slide-${side}` : 'mapfade';
+  box.classList.remove(...TRANSITION_CLASSES);
+  if (!cls) return;
   void box.offsetWidth;
-  box.classList.add('mapfade');
+  box.classList.add(cls);
 }
 
 // ---- towers: the elevator
@@ -15765,10 +15999,195 @@ function megaColorOf(cls) {
   probe.remove();
   return (megaColorCache[cls] = c && c !== 'rgba(0, 0, 0, 0)' ? c : '#1b1d29');
 }
-function showCityView(mapId, title, text) {
+// [ADDED] A MAP YOU CAN OPEN (Luna, Nov 23: the Imperial City is easy to get lost in, with no map). Press M in the Capital's
+// districts, or on any map with mapView: true (Game Maker: Maps → This map). Gold dots: ways in and out (doors, stairs,
+// entrances). Blue dots: shops. The white square is you. mapView: false takes it away from a district.
+var mapHintShown = false;
+// [ADDED] LOOKS (Luna, Nov 23: "make the game look better"). No gaps between the squares by default, so a map reads as one
+// picture instead of a board of buttons (BALANCE.squareGaps: 1 brings them back; a map's seamless: true/false wins).
+function seamlessHere() { const m = MAPS[state.map] || {}; return m.seamless === false ? false : m.seamless === true ? true : !Number(BALANCE.squareGaps); }
+// [ADDED] LOOKS: the title screen. The world itself drifts slowly behind the menu, dimmed, instead of a plain dark page.
+function titleBackdrop() {
+  if (document.querySelector('.titlebg') || !MAPS.world) return;
+  const G = MAPS.world.grid, s = 24, w = G[0].length, h = G.length;
+  const cv = document.createElement('canvas');
+  cv.width = w * s; cv.height = h * s;
+  const g = cv.getContext('2d');
+  g.imageSmoothingEnabled = false;
+  G.forEach((row, y) => row.forEach((code, x) => { g.fillStyle = miniColor(TILES[code]); g.fillRect(x * s, y * s, s, s); }));
+  const imgs = {};
+  G.forEach((row, y) => row.forEach((code, x) => {
+    const t = TILES[code], sp = t && tileSprite(t), url = sp && SPRITE_URLS[sp];
+    if (!url) return;
+    const im = imgs[url] || (imgs[url] = Object.assign(new Image(), { src: url }));
+    const put = () => g.drawImage(im, x * s, y * s, s, s);
+    if (im.complete && im.naturalWidth) put(); else im.addEventListener('load', put, { once: true });
+  }));
+  const wrap = document.createElement('div');
+  wrap.className = 'titlebg';
+  wrap.setAttribute('aria-hidden', 'true');
+  wrap.appendChild(cv);
+  document.body.prepend(wrap);
+}
+setTimeout(() => { try { titleBackdrop(); } catch (e) {} }, 400);
+// [ADDED] THE CORNER MAP (Luna, Nov 23: "there's no map system: where am I?"). A small map of where you are, always in the top
+// right of the map (click it for the big one, or press M; N hides it). The white square is you, the frame is what's on your
+// screen, gold dots are ways in and out, blue dots are shops, red is highway.
+var miniMemo = { key: null, base: null, s: 1 };
+var miniOff = false;
+try { miniOff = localStorage.getItem('texamo-minimap') === 'off'; } catch (e) {}
+function miniColor(t) {
+  if (!t) return '#0b0c18';
+  if (t.color) return t.color;
+  if (t.lane) return '#6b2235';
+  const cls = t.raised ? `${t.look || 'rd-roof'} raised` : t.look ? t.look : t.kind === 'wall' ? 'wall' : t.kind === 'blocked' ? 'blocked' : '';
+  return megaColorOf(cls || 'mwalk');
+}
+function renderMiniMap() {
+  if (!mapEl) return;
+  let box = mapEl.querySelector(':scope > .minimap');
+  const M = MAPS[state.map];
+  if (miniOff || !M || !mapViewHere() || currentPage !== 'play') { if (box) box.remove(); return; }
+  const G = M.grid, w = G[0].length, h = G.length, s = Math.max(1, Math.min(6, Math.floor(150 / Math.max(w, h))));
+  if (!box) { box = document.createElement('div'); box.className = 'minimap'; box.title = 'Map (M). N hides it.'; box.innerHTML = '<canvas></canvas><span></span>'; box.onclick = openMapView; }
+  if (!mapEl.contains(box)) mapEl.appendChild(box);
+  const key = state.map + ':' + w + 'x' + h + ':' + s;
+  if (miniMemo.key !== key || miniMemo.grid !== G) {
+    const base = document.createElement('canvas'); base.width = w * s; base.height = h * s;
+    const g = base.getContext('2d');
+    G.forEach((row, y) => row.forEach((code, x) => {
+      const t = TILES[code];
+      g.fillStyle = miniColor(t); g.fillRect(x * s, y * s, s, s);
+    }));
+    G.forEach((row, y) => row.forEach((code, x) => {
+      const t = TILES[code];
+      if (!t || !(t.shop || t.enter || t.link || t.lift || t.roomDoor)) return;
+      g.fillStyle = '#14162a'; g.fillRect(x * s - 1, y * s - 1, s + 2, s + 2);
+      g.fillStyle = t.shop ? '#4fe8ff' : '#ffd84a'; g.fillRect(x * s, y * s, s, s);
+    }));
+    miniMemo = { key, base, s, grid: G };
+  }
+  const cv = box.querySelector('canvas');
+  if (cv.width !== w * s || cv.height !== h * s) { cv.width = w * s; cv.height = h * s; }
+  const g = cv.getContext('2d');
+  g.drawImage(miniMemo.base, 0, 0);
+  g.strokeStyle = 'rgba(255,255,255,.75)'; g.lineWidth = 1;
+  g.strokeRect(cam.x * s + .5, cam.y * s + .5, viewW * s - 1, viewH * s - 1);
+  g.fillStyle = '#000'; g.fillRect(state.pos.x * s - 2, state.pos.y * s - 2, s + 4, s + 4);
+  g.fillStyle = '#fff'; g.fillRect(state.pos.x * s - 1, state.pos.y * s - 1, s + 2, s + 2);
+  const label = box.querySelector('span');
+  const name = String(M.name || '').split(': ').pop().replace(/^./, c => c.toUpperCase());
+  const clock = Number(BALANCE.dayMinutes) > 0 && skyKind() === 'clock' ? ` · ${String(Math.floor(gameHour())).padStart(2, '0')}:${String(Math.floor(gameHour() % 1 * 60)).padStart(2, '0')}` : '';
+  if (label.textContent !== name + clock) label.textContent = name + clock;
+}
+// ---- HIGHWAYS: you never arrive on one (it puts you on the nearest pavement)
+var laneWarnAt = 0;
+function offTheHighway() {
+  const here = tileAt(state.pos);
+  if (!here || !here.lane) return;
+  for (let r = 1; r <= 6; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+    if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+    const p = { x: state.pos.x + dx, y: state.pos.y + dy }, t = tileAt(p);
+    if (t && t.kind === 'ground' && !t.lane && !t.enter && !t.link && !mobAt(p.x, p.y)) { state.pos = p; return; }
+  }
+}
+// ---- WHERE AM I: the place's name, big, every time you come into a different place
+var lastBannerMap = null;
+function areaBanner() {
+  const m = MAPS[state.map];
+  if (!m || state.map === lastBannerMap) return;
+  lastBannerMap = state.map;
+  if (m.noBanner || /^shop_/.test(state.map) || typeof gameStarted === 'undefined' || !gameStarted) return;
+  const parts = String(m.name || '').split(': '), big = parts.pop(), small = parts.join(': ');
+  let el = document.getElementById('areaBanner');
+  if (!el) { el = document.createElement('div'); el.id = 'areaBanner'; el.setAttribute('aria-live', 'polite'); document.body.appendChild(el); }
+  el.innerHTML = `${small ? `<small>${esc(small)}</small>` : ''}<b>${esc(big.charAt(0).toUpperCase() + big.slice(1))}</b>`;
+  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+}
+// ---- DAY AND NIGHT (Luna, Nov 23: the Capital "doesn't scream neo Tokyo at night: it looks like daytime"). Outside, the time
+// of day follows a clock everyone online shares (BALANCE.dayMinutes for a whole day). The Capital's streets are always night.
+// A map can pick its own sky (Game Maker: Maps → This map → Sky): clock, night, day or inside (no sky). At night it gets
+// dark, lights glow (shops, doors, lamps, neon), and you carry a light of your own.
+function dayPhase() { const len = Number(BALANCE.dayMinutes) || 0; return len > 0 ? ((Date.now() / 60000) % len) / len : 0.5; }   // 0 midnight, 0.5 noon
+function gameHour() { return dayPhase() * 24; }
+function skyKind(id) {
+  const m = MAPS[id || state.map] || {};
+  if (m.sky) return m.sky;
+  if (m.dark) return 'inside';   // (dark places have their own darkness)
+  if (m.room) return 'inside';
+  if (m.mega) return 'night';
+  return 'clock';
+}
+function nightLevel() {   // 0 day … 1 deep night
+  const k = skyKind();
+  if (k === 'night') return 1;
+  if (k !== 'clock' || !(Number(BALANCE.dayMinutes) > 0)) return 0;
+  const h = gameHour();
+  if (h >= 7 && h < 17.5) return 0;
+  if (h >= 17.5 && h < 20) return (h - 17.5) / 2.5;
+  if (h >= 20 || h < 5) return 1;
+  return 1 - (h - 5) / 2;
+}
+var lightMemo = {};   // (what kind of light each square gives off, worked out once per square)
+function lightKind(code) {
+  if (code in lightMemo) return lightMemo[code];
+  const t = TILES[code];
+  let k = null;
+  if (t) {
+    const spr = String(tileSprite(t) || ''), look = String(t.look || '');
+    k = t.shop ? 'shop' : (t.enter || t.link || t.roomDoor || t.lift) ? 'door'
+      : (t.light || /lamp|lantern|torch|fire|brazier|candle|neon|sign|holo|screen|vend|glow|light|crystal/i.test(spr)) ? 'lamp'
+      : /neon|nroad|nlane|nhwy/.test(look) ? 'road' : t.front ? 'front' : null;
+  }
+  return (lightMemo[code] = k);
+}
+function hexA(hex, a) { const n = parseInt(String(hex).slice(1), 16); return `rgba(${n >> 16 & 255}, ${n >> 8 & 255}, ${n & 255}, ${a})`; }
+function renderNight() {
+  if (!mapGrid) return;
+  let cv = mapGrid.querySelector(':scope > .nightcv');
+  const lvl = nightLevel(), dark = lvl * Math.max(0, Math.min(95, Number(BALANCE.nightDark) || 0)) / 100;
+  if (mapEl) mapEl.classList.toggle('night', lvl > 0.5);
+  if (dark <= 0.01) { if (cv) cv.remove(); return; }
+  const step = cellPx + 2, W = (viewW + 2) * step, H = (viewH + 2) * step;
+  if (!cv) { cv = document.createElement('canvas'); cv.className = 'nightcv'; }
+  if (!mapGrid.contains(cv)) mapGrid.appendChild(cv);
+  if (cv.width !== Math.ceil(W / 2) || cv.height !== Math.ceil(H / 2)) { cv.width = Math.ceil(W / 2); cv.height = Math.ceil(H / 2); cv.style.width = W + 'px'; cv.style.height = H + 'px'; }   // (half size, stretched: soft light doesn't need more, and it's 4 times less work)
+  const g = cv.getContext('2d'), neon = megaHere(), lights = [];
+  g.setTransform(0.5, 0, 0, 0.5, 0, 0);
+  g.globalCompositeOperation = 'source-over';
+  g.clearRect(0, 0, W, H);
+  g.fillStyle = `rgba(6, 8, 32, ${dark})`;
+  g.fillRect(0, 0, W, H);
+  const at = (x, y) => [(x - cam.x + 1) * step + cellPx / 2, (y - cam.y + 1) * step + cellPx / 2];
+  for (let y = cam.y - 1; y <= cam.y + viewH; y++) for (let x = cam.x - 1; x <= cam.x + viewW; x++) {
+    const code = MAP[y] && MAP[y][x], k = code !== undefined ? lightKind(code) : null;
+    if (!k || lights.length >= 90) continue;
+    let c = null, r = 0, a = 0.7;
+    if (k === 'shop') { c = neon ? '#4fe8ff' : '#ffc46b'; r = 1.9; }
+    else if (k === 'door') { c = neon ? '#ff4fd8' : '#ffb347'; r = 1.4; }
+    else if (k === 'lamp') { c = TILES[code].light || (neon ? ((x + y) % 2 ? '#ff4fd8' : '#4fe8ff') : '#ffb347'); r = 2.1; }
+    else if (neon && k === 'road' && (x * 7 + y * 3) % 11 === 0) { c = (x + y) % 2 ? '#ff4fd8' : '#4fe8ff'; r = 0.9; a = 0.45; }   // (a few neon signs along the streets)
+    else if (neon && k === 'front' && (x * 5 + y) % 5 === 0) { c = ['#ffd84a', '#ff4fd8', '#4fe8ff'][(x + y * 3) % 3]; r = 0.8; a = 0.5; }   // (lit windows)
+    if (c) lights.push({ p: at(x, y), c, r, a });
+  }
+  const hole = (p, rr, a) => { const gr = g.createRadialGradient(p[0], p[1], 0, p[0], p[1], rr); gr.addColorStop(0, `rgba(0,0,0,${a})`); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(p[0] - rr, p[1] - rr, rr * 2, rr * 2); };
+  g.globalCompositeOperation = 'destination-out';
+  hole(at(state.pos.x, state.pos.y), Math.max(0.5, Number(BALANCE.lightRadius) || 2.5) * step, 0.9);
+  lights.forEach(L => hole(L.p, L.r * step, L.a));
+  g.globalCompositeOperation = 'source-over';
+  lights.forEach(L => { const rr = L.r * step, gr = g.createRadialGradient(L.p[0], L.p[1], 0, L.p[0], L.p[1], rr); gr.addColorStop(0, hexA(L.c, 0.42)); gr.addColorStop(0.5, hexA(L.c, 0.16)); gr.addColorStop(1, hexA(L.c, 0)); g.fillStyle = gr; g.fillRect(L.p[0] - rr, L.p[1] - rr, rr * 2, rr * 2); });
+}
+setInterval(() => { if (typeof currentPage !== 'undefined' && currentPage === 'play' && mapGrid && skyKind() === 'clock' && Number(BALANCE.dayMinutes) > 0) { renderNight(); renderMiniMap(); } }, 15000);
+function mapViewHere() { const m = MAPS[state.map] || {}; return m.noMap || m.mapView === false ? false : m.mapView === true ? true : !m.dark; }   // [CHANGED] every map has one now, except dark places (and ones the Game Maker turns off: noMap)
+function openMapView() {
+  if (overlayMode) return;
+  if (!mapViewHere()) return say('You don’t have a map of this place.');
+  showCityView(state.map, `Map: ${MAPS[state.map].name}`, 'Gold dots are ways in and out, blue dots are shops, and the white square is you.', true);
+}
+function showCityView(mapId, title, text, marks) {   // [ADDED] marks: A MAP YOU CAN OPEN
   const M = MAPS[mapId];
   if (!M) return;
-  const G = M.grid, s = 4;
+  const G = M.grid, s = marks ? Math.max(4, Math.min(12, Math.floor(640 / G[0].length))) : 4;
   const cv = document.createElement('canvas');
   cv.width = G[0].length * s; cv.height = G.length * s;
   const g2 = cv.getContext('2d');
@@ -15785,13 +16204,24 @@ function showCityView(mapId, title, text) {
     if (t && (t.lane || /nroad|nlane|nhwy|neonrd/.test(t.look || '')) && rnd() < 0.18) { g2.fillStyle = rnd() < 0.5 ? '#ff4fd8' : '#4fe8ff'; g2.fillRect(x * s + 1, y * s + 1, 2, 2); }   // traffic lights
     if (t && t.front && rnd() < 0.5) { g2.fillStyle = ['#ffd84a', '#ff4fd8', '#4fe8ff', '#ff7a3d'][Math.floor(rnd() * 4)]; g2.fillRect(x * s + 1, y * s, 2, 1); }   // lit windows
   }));
+  const places = new Set();   // [ADDED] A MAP YOU CAN OPEN: the dots, and the names under the map
+  if (marks) G.forEach((row, y) => row.forEach((code, x) => {
+    const t = TILES[code];
+    if (!t) return;
+    const shop = t.shop && SHOPS[t.shop], way = t.enter || t.link || t.lift || t.roomDoor;
+    if (!shop && !way) return;
+    g2.fillStyle = '#14162a'; g2.fillRect(x * s - 2, y * s - 2, s + 4, s + 4);
+    g2.fillStyle = shop ? '#4fe8ff' : '#ffd84a'; g2.fillRect(x * s - 1, y * s - 1, s + 2, s + 2);
+    places.add((shop && shop.name) || t.name);
+  }));
   if (mapId === state.map) { g2.strokeStyle = '#ffffff'; g2.lineWidth = 2; g2.strokeRect(state.pos.x * s - 6, state.pos.y * s - 6, s + 12, s + 12); }
   overlayMode = 'boss';
   openOverlay();
   dialogEl.innerHTML = `<h2 id="dlgTitle">${esc(title || 'The view')}</h2>
     <div class="islandview cityview"><img src="${cv.toDataURL()}" alt="The whole district from above"></div>
     <p>${esc(text || `${M.name} spreads out below you: the neon roads, the rooftops, the people like sparks. You (the white square) are a speck in it.`)}</p>
-    <div class="row"><button type="button" class="btn" data-act="close">Step back from the rail</button></div>`;
+    ${places.size ? `<p class="small muted">${[...places].filter(Boolean).slice(0, 40).map(esc).join(' · ')}</p>` : ''}
+    <div class="row"><button type="button" class="btn" data-act="close">${marks ? 'Close the map' : 'Step back from the rail'}</button></div>`;
   sfx('coin');
   dialogEl.querySelector('button').focus();
 }
@@ -15801,7 +16231,8 @@ Object.assign(TOWERS, {"obs":{"name":"Obsidian Tower","floors":[{"label":"The lo
 
 function renderMap() {
   viewBoostChanged();   // [ADDED] THE MEGACITY: up high, you see farther
-  if (mapEl) { mapEl.classList.toggle('mega', megaHere()); mapEl.classList.toggle('seamless', Boolean(MAPS[state.map] && MAPS[state.map].seamless)); }   // [ADDED] THE MEGACITY (seamless: no gaps between squares, for a map that asks for it)
+  // [CHANGED] LOOKS: no gaps between squares by default (BALANCE.squareGaps; a map's own seamless: true/false wins)
+  if (mapEl) { mapEl.classList.toggle('mega', megaHere()); mapEl.classList.toggle('seamless', seamlessHere()); }   // [ADDED] THE MEGACITY (seamless: no gaps between squares, for a map that asks for it)
   fitView();
   const { dx, dy } = moveCamera();
   if (!mapGrid || !mapEl.contains(mapGrid)) {
@@ -15839,7 +16270,7 @@ function renderMap() {
       btn.dataset.x = x;
       btn.dataset.y = y;
       btn.style.setProperty('--r', row);   // [ADDED] BIGGER PICTURES: the row on screen (lower rows are in front)
-      btn.innerHTML = here ? sprite('player') : out ? '' : sprite(tileSprite(t));
+      btn.innerHTML = here ? sprite('player', '', winged() ? 'aloft' : '') : out ? '' : sprite(tileSprite(t));   // [ADDED] aloft: WINGS
       btn.title = t.plot !== undefined ? `${t.name}: ${plotLabel(t.plot)}` : t.name;   // [ADDED] THE REGIME: whose plot
       if (t.plot !== undefined && plotLabel(t.plot) !== 'for sale') { const o = myRegime() && myRegime().plot === t.plot ? myRegime() : Object.values(allRegimes).find(g => g && Number(g.plot) === t.plot); if (o) btn.innerHTML = regimeBannerHtml(o); }
       btn.setAttribute('aria-label', here ? `${t.name}, you’re here` : t.name);
@@ -15864,18 +16295,41 @@ function renderMap() {
   renderOthers();
 
   // The glide: put the squares back where they were, then slide them into place.
-  if ((dx || dy) && Math.abs(dx) <= 2 && Math.abs(dy) <= 2 && CAMERA_GLIDE_MS && !reduceMotion) {
+  // [CHANGED] Holding a key steps faster than the glide, and every new step used to restart it a square behind, so the
+  // camera trailed you. Now a glide only lasts as long as the gap since the last one, and very fast steps don't glide at all.
+  const glideMs = Math.min(CAMERA_GLIDE_MS, Date.now() - camGlideAt);
+  if ((dx || dy) && Math.abs(dx) <= 2 && Math.abs(dy) <= 2 && CAMERA_GLIDE_MS && !reduceMotion && glideMs >= 40) {
+    camGlideAt = Date.now();
     const step = cellPx + 2;
     mapGrid.style.transition = 'none';
     mapGrid.style.transform = `translate(${dx * step}px, ${dy * step}px)`;
     mapGrid.getBoundingClientRect();   // makes the browser notice the starting spot
-    mapGrid.style.transition = `transform ${CAMERA_GLIDE_MS}ms ease-out`;
+    mapGrid.style.transition = `transform ${glideMs}ms ease-out`;
+    mapGrid.style.transform = 'translate(0, 0)';
+  } else if (dx || dy) {
+    camGlideAt = Date.now();
+    mapGrid.style.transition = 'none';   // too fast to glide: snap, so you're never ahead of the camera
     mapGrid.style.transform = 'translate(0, 0)';
   }
   drawAimLines();   // [ADDED] see AIM LINES
+  renderNight();    // [ADDED] DAY AND NIGHT
+  renderMiniMap();  // [ADDED] A MAP YOU CAN OPEN: the corner map
 }
 
 // [ADDED] Draw the people and enemies walking around.
+// [ADDED] LAG FIX (Luna, Nov 23: the Capital is laggy). A district has 40+ people and enemies walking around, and every time any
+// one of them took a step the whole map was drawn again, about 10 times a second, even for ones far off screen (and it cut your
+// own step's glide short). Now it's only drawn again when something on screen changed.
+var mobViewSig = '';
+function mobViewChanged() {
+  const now = Date.now(), x0 = cam.x - 2, y0 = cam.y - 2, x1 = cam.x + viewW + 1, y1 = cam.y + viewH + 1;
+  const sig = state.map + '|' + mobs.filter(m => (m.x >= x0 && m.x <= x1 && m.y >= y0 && m.y <= y1) || (m.windup && now < m.windup.until + 100))
+    .map(m => [m.id, m.x, m.y, m.mood, m.busy ? 1 : 0, m.brawlWith ? 1 : 0, m.lostAt ? 1 : 0, m.leader ? 1 : 0, m.face || '', m.aiming ? 1 : 0, m.aimTo ? `${m.aimTo.x},${m.aimTo.y}` : '',
+      m.windup ? m.windup.until : 0, now < (m.dazedUntil || 0) ? 1 : 0, now < (m.stunUntil || 0) ? 1 : 0, now < (m.slowUntil || 0) ? 1 : 0, m.mapPoison && now < m.mapPoison.until ? 1 : 0, m.enemy || m.npc].join(',')).join(';');
+  if (sig === mobViewSig) return false;
+  mobViewSig = sig;
+  return true;
+}
 function renderMobs() {
   mobs.forEach(mob => {
     if (mob.busy) return;   // [ADDED] it's in a fight with someone (see SHARED ENEMIES)
@@ -16568,6 +17022,7 @@ function showPage(id) {
   if (!gameStarted && id !== 'menu' && id !== 'rules' && id !== 'news') id = 'menu';   // [ADDED] news: What's new is open to everyone
   if (id === 'regime' && !regimeOpen()) id = 'play';   // [ADDED] the Regime opens when the Empire falls
   currentPage = id;
+  document.body.dataset.page = id;   // [ADDED] LOOKS: the title screen's world shows only on the menu
   const bagPop = gameStarted && id === 'inventory';   // [ADDED] THE BAG POP-UP: over the map, which stays put behind it
   document.body.classList.toggle('bagpop', bagPop);
   regimeMenuCheck();
@@ -16792,6 +17247,9 @@ document.addEventListener('keydown', ev => {
     ev.preventDefault();
     return blindOnMap(QUICK_KEYS[key]);
   }
+  if (key === 'q' && wingsGear()) { ev.preventDefault(); return takeFlight(); }   // [ADDED] WINGS
+  if (key === 'm') { ev.preventDefault(); return openMapView(); }   // [ADDED] A MAP YOU CAN OPEN
+  if (key === 'n') { ev.preventDefault(); miniOff = !miniOff; try { localStorage.setItem('texamo-minimap', miniOff ? 'off' : 'on'); } catch (e) {} return renderMiniMap(); }   // [ADDED] THE CORNER MAP: hide or show it
   const d = dirs[key];
   if (!d) return;
   ev.preventDefault();
@@ -17101,13 +17559,16 @@ function songProblems(song) {
 const DRUM_BEATS = { none: '', soft: 'k...h.h.', march: 'k.s.k.ss', rock: 'xhoxxhoh', driving: 'xxoxxxox', waltz: 'k.h.h.' };
 const songCache = new WeakMap();
 function parseSong(song) {
-  const key = JSON.stringify([song.bpm, song.steps, song.chords, song.melody, song.harmony, song.bass, song.drums]);
+  const key = JSON.stringify([song.bpm, song.steps, song.chords, song.melody, song.harmony, song.bass, song.drums, song.tracks]);   // [ADDED] tracks
   const old = songCache.get(song);
   if (old && old.key === key) return old;
   const steps = Math.max(2, Math.min(32, Math.round(Number(song.steps) || 8)));
   const bpm = Math.max(30, Math.min(300, Number(song.bpm) || 110));
   const cBars = songBars(song.chords), mBars = songBars(song.melody);
-  const bars = Math.max(1, cBars.length, mBars.length);
+  // [ADDED] MORE TRACKS (Luna, Nov 23): tracks: [{ name, sound, notes, volume }] are more lines of notes, written like the tune,
+  // each with its own sound (a bass line, a second voice...). The Game Maker's music editor writes them.
+  const tracks = Array.isArray(song.tracks) ? song.tracks : [], tBars = tracks.map(tr => songBars(tr && tr.notes));
+  const bars = Math.max(1, cBars.length, mBars.length, ...tBars.map(b => b.length));
   const total = bars * steps;
   const at = Array.from({ length: total }, () => []);   // what starts on each step
   const put = (st, ev) => { if (st >= 0 && st < total) at[st].push(ev); };
@@ -17125,7 +17586,12 @@ function parseSong(song) {
     return out;
   };
   // the tune
-  lay(mBars, (tok, s, len) => { const midi = noteMidi(tok); return midi === null ? null : { kind: 'lead', midi, s, len }; }).forEach(ev => put(ev.s, ev));
+  if (mBars.length) lay(mBars, (tok, s, len) => { const midi = noteMidi(tok); return midi === null ? null : { kind: 'lead', midi, s, len }; }).forEach(ev => put(ev.s, ev));   // [CHANGED] (no tune: nothing to lay)
+  tracks.forEach((tr, i) => {   // [ADDED] MORE TRACKS
+    if (!tr || tr.mute || !tBars[i].length) return;
+    const vol = Number.isFinite(Number(tr.volume)) ? Number(tr.volume) : 1;
+    lay(tBars[i], (tok, s, len) => { const midi = noteMidi(tok); return midi === null ? null : { kind: 'lead', wave: tr.sound || 'square', vol, midi, s, len }; }).forEach(ev => put(ev.s, ev));
+  });
   // the chords and the bass
   const harmony = song.harmony || 'arp', bass = song.bass || 'root';
   lay(cBars, (tok, s, len) => { const c = chordNotes(tok); return c ? { c, s, len } : null; }).forEach(({ c, s, len }) => {
@@ -17175,11 +17641,11 @@ function noiseBuf(ctx) {
   noiseCache = { ctx, b };
   return b;
 }
-function songVoice(ctx, out, kind, wave, midi, t, dur) {
+function songVoice(ctx, out, kind, wave, midi, t, dur, mul) {   // [ADDED] mul: a track's volume
   const o = ctx.createOscillator(), g = ctx.createGain();
   if (wave === 'pulse') o.setPeriodicWave(pulseWave(ctx)); else o.type = WAVE_VOL[wave] ? wave : 'square';
   o.frequency.value = 440 * Math.pow(2, (midi - 69) / 12);
-  const v = ({ lead: 0.2, harm: 0.07, pad: 0.06, bass: 0.24 }[kind] || 0.1) * (WAVE_VOL[wave] || 0.5);
+  const v = ({ lead: 0.2, harm: 0.07, pad: 0.06, bass: 0.24 }[kind] || 0.1) * (WAVE_VOL[wave] || 0.5) * (Number.isFinite(mul) ? Math.max(0, mul) : 1);
   const att = kind === 'pad' ? 0.12 : 0.008, rel = kind === 'pad' ? 0.25 : 0.05;
   const end = t + Math.max(att + 0.02, dur - 0.012);
   g.gain.setValueAtTime(0.0001, t);
@@ -17227,7 +17693,7 @@ function startSong(song, out) {
       const t = pl.next;
       p.at[pl.step].forEach(ev => {
         if (ev.kind === 'kick' || ev.kind === 'snare' || ev.kind === 'hat') songDrum(ctx, g, ev.kind, t);
-        else songVoice(ctx, g, ev.kind, waves[ev.kind], ev.midi, t, ev.len * p.stepDur);
+        else songVoice(ctx, g, ev.kind, ev.wave || waves[ev.kind], ev.midi, t, ev.len * p.stepDur, ev.vol);   // [ADDED] wave, vol: MORE TRACKS
       });
       pl.step += 1; pl.next += p.stepDur;
     }
@@ -21943,10 +22409,10 @@ function wanderTick() {
       if (overlayMode) break;   // it caught you, so everything stops for the popup
     }
   }
-  if (retireBosses()) changed = true;   // [ADDED] MAP COMBAT 2
+  const forced = retireBosses();   // [ADDED] MAP COMBAT 2
 
   if (respawnTick(now)) changed = true;
-  if (changed) renderMap();
+  if (forced || (changed && mobViewChanged())) renderMap();   // [CHANGED] LAG FIX: only when something you can see changed
 }
 
 // Respawns: keep the count of enemies (plus ones on the way) up to the cap.
@@ -22691,6 +23157,7 @@ function renderStudio() {
         <div class="row">
           ${tool('pen', 'Pen')}${tool('erase', 'Eraser')}${tool('fill', 'Fill')}${tool('pick', 'Pick color')}
           <button type="button" class="btn sm" data-st="mirror" aria-pressed="${studio.mirror}">Mirror ↔</button>
+          <label class="muted small">Background <input type="color" id="stBg" value="${studioBg()}"></label>
         </div>
         <div class="row">
           <button type="button" class="btn sm" data-st="undo"${studio.undo.length ? '' : ' disabled'}>Undo</button>
@@ -22744,6 +23211,10 @@ function studioCode() {
   return `  ${name}: [\n${lines.map(l => '    ' + l).join('\n')}\n  ],`;
 }
 
+// [ADDED] STUDIO BACKGROUND (Luna, Nov 23: the checkerboard made white pixels impossible to see). See-through squares are
+// one plain color you pick with Background. It's the same setting as the Game Maker's picture editor, and it never changes the picture.
+function studioBg() { try { const v = localStorage.getItem('gmPixBg'); if (/^#[0-9a-f]{6}$/i.test(v || '')) return v; } catch (e) {} return '#4a5070'; }
+
 // Draw the big editing grid, the preview, and the code box.
 function drawStudio() {
   const canvas = document.getElementById('stCanvas');
@@ -22757,8 +23228,8 @@ function drawStudio() {
     const ch = studio.rows[y][x];
     const hex = PALETTE[ch] || SLOT_COLORS[ch];
     if (hex) { ctx.fillStyle = hex; ctx.fillRect(x * px, y * px, px, px); }
-    else {   // see-through: a checkerboard
-      ctx.fillStyle = (x + y) % 2 ? '#e8e8e8' : '#ffffff';
+    else {   // see-through: [CHANGED] your Background color (was a white checkerboard)
+      ctx.fillStyle = studioBg();
       ctx.fillRect(x * px, y * px, px, px);
     }
   }
@@ -22946,6 +23417,7 @@ document.addEventListener('change', ev => {
   }
 });
 document.addEventListener('input', ev => {
+  if (ev.target.id === 'stBg') { try { localStorage.setItem('gmPixBg', ev.target.value); } catch (e) {} return drawStudio(); }   // [ADDED] STUDIO BACKGROUND
   if (ev.target.id !== 'stFilter') return;
   studio.filter = ev.target.value.toLowerCase();
   const pos = ev.target.selectionStart;
